@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. Zahoor Ahmed | Digital Twin & Resilient Control</title>
+    <style>
+        :root {
+            --primary-navy: #0A192F;
+            --accent-cyan: #00D4AA;
+            --alert-orange: #FF6B35;
+            --text-primary: #E6F1FF;
+            --text-secondary: #8892B0;
+            --glass-bg: rgba(10, 25, 47, 0.7);
+            --grid-line: rgba(100, 255, 218, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--primary-navy);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: linear-gradient(to bottom, rgba(10,25,47,0.9), transparent);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-cyan);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            overflow: hidden;
+        }
+
+        #digital-twin-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 107, 53, 0.1);
+            border: 1px solid var(--alert-orange);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--alert-orange);
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--alert-orange);
+            border-radius: 50%;
+            animation: blink 1.5s infinite;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, var(--text-primary) 60%, var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.5rem);
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            font-weight: 400;
+        }
+
+        .highlight {
+            color: var(--accent-cyan);
+            font-weight: 600;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: var(--accent-cyan);
+            color: var(--primary-navy);
+            box-shadow: 0 10px 30px -10px rgba(0, 212, 170, 0.5);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px -10px rgba(0, 212, 170, 0.6);
+        }
+
+        .btn-secondary {
+            border: 2px solid var(--text-secondary);
+            color: var(--text-primary);
+            background: transparent;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+            background: rgba(0, 212, 170, 0.05);
+        }
+
+        /* Digital Twin Info Card */
+        .twin-status-card {
+            position: absolute;
+            right: 5%;
+            bottom: 10%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            z-index: 3;
+            max-width: 350px;
+            animation: slideInRight 1s ease-out 0.5s both;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .twin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(100, 255, 218, 0.1);
+        }
+
+        .twin-title {
+            font-size: 0.9rem;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: #00ff00;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #00ff00;
+            border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+
+        .twin-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .metric {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .metric-value.safe {
+            color: var(--accent-cyan);
+        }
+
+        .metric-value.warning {
+            color: var(--alert-orange);
+        }
+
+        .sync-bar {
+            grid-column: span 2;
+            height: 6px;
+            background: rgba(100, 255, 218, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .sync-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-cyan), #64ffda);
+            width: 98%;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 10px rgba(0, 212, 170, 0.5);
+        }
+
+        .attack-alert {
+            grid-column: span 2;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(255, 107, 53, 0.1);
+            border-left: 3px solid var(--alert-orange);
+            border-radius: 4px;
+            font-size: 0.85rem;
+            display: none;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .attack-alert.active {
+            display: block;
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .mouse {
+            width: 25px;
+            height: 40px;
+            border: 2px solid var(--text-secondary);
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .mouse::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 8px;
+            background: var(--accent-cyan);
+            border-radius: 2px;
+            animation: scrollWheel 2s infinite;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        @keyframes scrollWheel {
+            0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(15px); }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .twin-status-card {
+                display: none;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .hero {
+                padding-top: 20vh;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="#" class="logo">ZA.</a>
+        <ul class="nav-links">
+            <li><a href="#research">Research</a></li>
+            <li><a href="#publications">Publications</a></li>
+            <li><a href="#lab">Lab</a></li>
+            <li><a href="#teaching">Teaching</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <canvas id="digital-twin-canvas"></canvas>
+        
+        <div class="hero-content">
+            <div class="status-badge">
+                <span class="pulse-dot"></span>
+                Recruiting PhD/MSc Students - Digital Twin Security
+            </div>
+            
+            <h1>
+                Securing Autonomous Systems through <span class="highlight">Digital Twin</span> Intelligence
+            </h1>
+            
+            <p class="subtitle">
+                Assistant Professor at Shanghai University of Electric Power | 
+                Specializing in Resilient Consensus Control, Cyber-Attack Detection, 
+                and Multi-Agent Systems (UAVs, ASVs, Smart Grids)
+            </p>
+            
+            <div class="cta-group">
+                <a href="#research" class="btn btn-primary">View Research Lab</a>
+                <a href="mailto:zahoor@shiep.edu.cn?subject=Collaboration%20Inquiry%20-%20Digital%20Twin" class="btn btn-secondary">Collaborate</a>
+            </div>
+        </div>
+
+        <div class="twin-status-card">
+            <div class="twin-header">
+                <span class="twin-title">Digital Twin Status</span>
+                <div class="live-indicator">
+                    <span class="live-dot"></span>
+                    LIVE
+                </div>
+            </div>
+            
+            <div class="twin-metrics">
+                <div class="metric">
+                    <span class="metric-label">Sync Accuracy</span>
+                    <span class="metric-value safe" id="sync-acc">98.4%</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Agents Online</span>
+                    <span class="metric-value" id="agent-count">12/12</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Latency</span>
+                    <span class="metric-value safe" id="latency">12ms</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Threat Level</span>
+                    <span class="metric-value" id="threat-level">LOW</span>
+                </div>
+                <div class="sync-bar">
+                    <div class="sync-progress" id="sync-bar"></div>
+                </div>
+                <div class="attack-alert" id="attack-alert">
+                    <strong>⚠️ Attack Detected:</strong> FDI on Agent #7. Resilient consensus protocol activated.
+                </div>
+            </div>
+        </div>
+
+        <div class="scroll-indicator">
+            <div class="mouse"></div>
+            <span>Scroll to explore</span>
+        </div>
+    </section>
+
+    <script>
+        // Digital Twin Visualization - Particle System representing agents and their digital twins
+        const canvas = document.getElementById('digital-twin-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let width, height;
+        let particles = [];
+        let connections = [];
+        let mouse = { x: null, y: null, radius: 150 };
+        
+        // Resize canvas
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            initParticles();
+        }
+        
+        // Particle class representing Physical Agent and Digital Twin pair
+        class Agent {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 3 + 2;
+                this.baseX = this.x;
+                this.baseY = this.y;
+                this.density = (Math.random() * 30) + 1;
+                this.color = '#00D4AA';
+                this.twinOffset = { x: (Math.random() - 0.5) * 50, y: (Math.random() - 0.5) * 50 };
+                this.isAttacked = false;
+                this.attackTimer = Math.random() * 500 + 500;
+            }
+            
+            draw() {
+                // Draw connection line between physical and digital twin (represents data flow)
+                if (!this.isAttacked) {
+                    ctx.strokeStyle = 'rgba(0, 212, 170, 0.2)';
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(this.x, this.y);
+                    ctx.lineTo(this.x + this.twinOffset.x, this.y + this.twinOffset.y);
+                    ctx.stroke();
+                    
+                    // Draw Digital Twin (ghost/transparent)
+                    ctx.fillStyle = 'rgba(100, 255, 218, 0.3)';
+                    ctx.beginPath();
+                    ctx.arc(this.x + this.twinOffset.x, this.y + this.twinOffset.y, this.size * 0.8, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Draw Physical Agent (solid)
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Glow effect
+                    ctx.shadowBlur = 15;
+                    ctx.shadowColor = this.color;
+                } else {
+                    // Attacked state - red and erratic
+                    ctx.fillStyle = '#FF6B35';
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size * 1.2, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Draw attack radius
+                    ctx.strokeStyle = 'rgba(255, 107, 53, 0.5)';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size * 3, 0, Math.PI * 2);
+                    ctx.stroke();
+                }
+                ctx.shadowBlur = 0;
+            }
+            
+            update() {
+                // Check for attack simulation
+                this.attackTimer--;
+                if (this.attackTimer <= 0) {
+                    this.isAttacked = !this.isAttacked;
+                    this.attackTimer = this.isAttacked ? 200 : Math.random() * 1000 + 500;
+                    updateStatusCard(this.isAttacked);
+                }
+                
+                if (this.isAttacked) {
+                    // Erratic movement when attacked
+                    this.x += (Math.random() - 0.5) * 4;
+                    this.y += (Math.random() - 0.5) * 4;
+                } else {
+                    // Normal movement - slight drift
+                    this.x += (Math.random() - 0.5) * 0.5;
+                    this.y += (Math.random() - 0.5) * 0.5;
+                }
+                
+                // Mouse interaction
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < mouse.radius) {
+                    const forceDirectionX = dx / distance;
+                    const forceDirectionY = dy / distance;
+                    const maxDistance = mouse.radius;
+                    const force = (maxDistance - distance) / maxDistance;
+                    const directionX = forceDirectionX * force * this.density;
+                    const directionY = forceDirectionY * force * this.density;
+                    
+                    this.x -= directionX;
+                    this.y -= directionY;
+                } else {
+                    // Return to base
+                    if (this.x !== this.baseX) {
+                        let dx = this.x - this.baseX;
+                        this.x -= dx / 10;
+                    }
+                    if (this.y !== this.baseY) {
+                        let dy = this.y - this.baseY;
+                        this.y -= dy / 10;
+                    }
+                }
+                
+                // Keep in bounds
+                if (this.x < 0 || this.x > width) this.baseX = Math.random() * width;
+                if (this.y < 0 || this.y > height) this.baseY = Math.random() * height;
+            }
+        }
+        
+        function initParticles() {
+            particles = [];
+            const numberOfParticles = Math.min(50, (width * height) / 15000);
+            for (let i = 0; i < numberOfParticles; i++) {
+                particles.push(new Agent());
+            }
+        }
+        
+        function connect() {
+            let opacityValue = 1;
+            for (let a = 0; a < particles.length; a++) {
+                for (let b = a; b < particles.length; b++) {
+                    let distance = ((particles[a].x - particles[b].x) * (particles[a].x - particles[b].x))
+                        + ((particles[a].y - particles[b].y) * (particles[a].y - particles[b].y));
+                    
+                    if (distance < (width/7) * (width/7)) {
+                        opacityValue = 1 - (distance/20000);
+                        // If either is attacked, show red connection (compromised network)
+                        if (particles[a].isAttacked || particles[b].isAttacked) {
+                            ctx.strokeStyle = `rgba(255, 107, 53, ${opacityValue * 0.5})`;
+                        } else {
+                            ctx.strokeStyle = `rgba(0, 212, 170, ${opacityValue * 0.3})`;
+                        }
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[a].x, particles[a].y);
+                        ctx.lineTo(particles[b].x, particles[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+        
+        function updateStatusCard(attacked) {
+            const threatLevel = document.getElementById('threat-level');
+            const syncAcc = document.getElementById('sync-acc');
+            const attackAlert = document.getElementById('attack-alert');
+            const agentCount = document.getElementById('agent-count');
+            
+            if (attacked) {
+                threatLevel.textContent = 'HIGH';
+                threatLevel.className = 'metric-value warning';
+                syncAcc.textContent = '67.2%';
+                attackAlert.classList.add('active');
+                agentCount.textContent = '11/12';
+            } else {
+                threatLevel.textContent = 'LOW';
+                threatLevel.className = 'metric-value safe';
+                syncAcc.textContent = '98.4%';
+                attackAlert.classList.remove('active');
+                agentCount.textContent = '12/12';
+            }
+        }
+        
+        // Animation loop
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            
+            // Draw grid background
+            ctx.strokeStyle = 'rgba(100, 255, 218, 0.05)';
+            ctx.lineWidth = 1;
+            const gridSize = 50;
+            for (let x = 0; x <= width; x += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, height);
+                ctx.stroke();
+            }
+            for (let y = 0; y <= height; y += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(width, y);
+                ctx.stroke();
+            }
+            
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+            connect();
+            requestAnimationFrame(animate);
+        }
+        
+        // Mouse interaction
+        window.addEventListener('mousemove', function(event) {
+            mouse.x = event.x;
+            mouse.y = event.y;
+        });
+        
+        window.addEventListener('mouseout', function() {
+            mouse.x = undefined;
+            mouse.y = undefined;
+        });
+        
+        window.addEventListener('resize', resize);
+        resize();
+        animate();
+        
+        // Simulate real-time metrics fluctuation
+        setInterval(() => {
+            const latency = document.getElementById('latency');
+            const syncBar = document.getElementById('sync-bar');
+            if (!document.getElementById('attack-alert').classList.contains('active')) {
+                latency.textContent = (10 + Math.random() * 5).toFixed(0) + 'ms';
+                syncBar.style.width = (95 + Math.random() * 4) + '%';
+            }
+        }, 2000);
+    </script>
+</body>
+</html>
