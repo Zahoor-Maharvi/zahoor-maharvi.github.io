@@ -483,6 +483,748 @@
             <div class="mouse"></div>
             <span>Scroll to explore</span>
         </div>
+<!-- Research Pipeline Section -->
+<section id="research-pipeline" class="pipeline-section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">Research Evolution</span>
+            <h2 class="section-title">The Digital Thread</h2>
+            <p class="section-subtitle">From theoretical foundations to real-world autonomous systems security</p>
+        </div>
+
+        <div class="timeline-container">
+            <!-- Timeline Line -->
+            <div class="timeline-line">
+                <div class="timeline-progress" id="timeline-progress"></div>
+            </div>
+
+            <!-- Phase 1: PhD -->
+            <div class="timeline-item" data-phase="1">
+                <div class="timeline-content left">
+                    <div class="phase-badge">Phase 01</div>
+                    <h3>Frequency Domain Foundations</h3>
+                    <span class="institution">Ph.D. | Shanghai Jiao Tong University</span>
+                    <span class="duration">2017 – 2022</span>
+                    <p>Developed resilient consensus algorithms for delayed multi-agent systems using frequency-domain analysis. Established mathematical frameworks for H∞ control under deception attacks.</p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Delay Systems</span>
+                        <span class="tech-tag">H∞ Control</span>
+                        <span class="tech-tag">Consensus Theory</span>
+                    </div>
+                    <div class="key-paper">
+                        <strong>Key Output:</strong> Frequency-domain resilient consensus under IMP-based attacks (Automatica)
+                    </div>
+                </div>
+                <div class="timeline-node">
+                    <div class="node-dot"></div>
+                    <div class="node-pulse"></div>
+                </div>
+                <div class="timeline-visual right">
+                    <div class="viz-container">
+                        <canvas id="phase1-canvas" class="phase-canvas"></canvas>
+                        <div class="viz-label">Frequency Response Analysis</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase 2: Postdoc -->
+            <div class="timeline-item" data-phase="2">
+                <div class="timeline-visual left">
+                    <div class="viz-container">
+                        <canvas id="phase2-canvas" class="phase-canvas"></canvas>
+                        <div class="viz-label">Attack Detection Module</div>
+                    </div>
+                </div>
+                <div class="timeline-node">
+                    <div class="node-dot"></div>
+                    <div class="node-pulse"></div>
+                </div>
+                <div class="timeline-content right">
+                    <div class="phase-badge">Phase 02</div>
+                    <h3>Cyber-Attack Detection</h3>
+                    <span class="institution">Postdoctoral Fellow | Shanghai Jiao Tong University</span>
+                    <span class="duration">2022 – 2024</span>
+                    <p>Developed Digital Twin-based attack detection for autonomous systems. Created state estimation methods to identify False Data Injection (FDI) and replay attacks in real-time.</p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Digital Twin</span>
+                        <span class="tech-tag">FDI Detection</span>
+                        <span class="tech-tag">State Estimation</span>
+                    </div>
+                    <div class="key-paper">
+                        <strong>Key Output:</strong> Digital Twin based Attack Detection for ASVs (IEEE TVT)
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase 3: Faculty -->
+            <div class="timeline-item" data-phase="3">
+                <div class="timeline-content left">
+                    <div class="phase-badge current">Phase 03</div>
+                    <h3>Digital Twin Resilience</h3>
+                    <span class="institution">Assistant Professor | Shanghai University of Electric Power</span>
+                    <span class="duration">2025 – Present</span>
+                    <p>Leading NSFC-funded research on Digital Twin cyber-attack detection and resilient consensus control for multi-agent systems including UAVs, ASVs, and smart grids.</p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">UAV Swarms</span>
+                        <span class="tech-tag">Smart Grid</span>
+                        <span class="tech-tag">Resilient Control</span>
+                    </div>
+                    <div class="key-paper">
+                        <strong>Current:</strong> NSFC-RFIS Project (¥400K) | Digital Twin Resilient Consensus
+                    </div>
+                </div>
+                <div class="timeline-node">
+                    <div class="node-dot current"></div>
+                    <div class="node-pulse current"></div>
+                </div>
+                <div class="timeline-visual right">
+                    <div class="viz-container active">
+                        <canvas id="phase3-canvas" class="phase-canvas"></canvas>
+                        <div class="viz-label">Live Digital Twin Sync</div>
+                        <div class="live-badge">ACTIVE</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Research Areas Grid -->
+        <div class="research-areas">
+            <h3 class="subheading">Current Research Domains</h3>
+            <div class="domains-grid">
+                <div class="domain-card" data-domain="uav">
+                    <div class="domain-icon">🚁</div>
+                    <h4>UAV Swarms</h4>
+                    <p>Resilient consensus control for unmanned aerial vehicles under cyber-attacks using graph-aware digital twins.</p>
+                    <div class="domain-status">Active Research</div>
+                </div>
+                <div class="domain-card" data-domain="asv">
+                    <div class="domain-icon">🚢</div>
+                    <h4>Autonomous Surface Vehicles</h4>
+                    <p>Digital twin-based trajectory tracking and attack detection for marine autonomous systems.</p>
+                    <div class="domain-status">Active Research</div>
+                </div>
+                <div class="domain-card" data-domain="grid">
+                    <div class="domain-icon">⚡</div>
+                    <h4>Smart Grids</h4>
+                    <p>Cross-domain microgrid collaborative control and distributed energy optimization with privacy protection.</p>
+                    <div class="domain-status">NSFC Funded</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+/* Research Pipeline Section Styles */
+.pipeline-section {
+    padding: 8rem 5%;
+    background: linear-gradient(to bottom, var(--primary-navy), #0d1b2a);
+    position: relative;
+    overflow: hidden;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 6rem;
+}
+
+.section-tag {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: rgba(0, 212, 170, 0.1);
+    border: 1px solid var(--accent-cyan);
+    border-radius: 50px;
+    color: var(--accent-cyan);
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+.section-title {
+    font-size: 3rem;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-weight: 800;
+}
+
+.section-subtitle {
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+}
+
+/* Timeline Container */
+.timeline-container {
+    position: relative;
+    padding: 2rem 0;
+}
+
+.timeline-line {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(100, 255, 218, 0.1);
+    transform: translateX(-50%);
+}
+
+.timeline-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0%;
+    background: linear-gradient(to bottom, var(--accent-cyan), #64ffda);
+    box-shadow: 0 0 20px rgba(0, 212, 170, 0.5);
+    transition: height 0.5s ease;
+}
+
+/* Timeline Items */
+.timeline-item {
+    display: grid;
+    grid-template-columns: 1fr 80px 1fr;
+    gap: 2rem;
+    margin-bottom: 6rem;
+    position: relative;
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.6s ease;
+}
+
+.timeline-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.timeline-node {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.node-dot {
+    width: 20px;
+    height: 20px;
+    background: var(--primary-navy);
+    border: 3px solid var(--accent-cyan);
+    border-radius: 50%;
+    z-index: 2;
+    position: relative;
+}
+
+.node-dot.current {
+    background: var(--accent-cyan);
+    box-shadow: 0 0 20px var(--accent-cyan);
+}
+
+.node-pulse {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 212, 170, 0.3);
+    border-radius: 50%;
+    animation: pulse-ring 2s infinite;
+}
+
+.node-pulse.current {
+    background: rgba(0, 212, 170, 0.5);
+}
+
+@keyframes pulse-ring {
+    0% { transform: scale(0.8); opacity: 1; }
+    100% { transform: scale(1.5); opacity: 0; }
+}
+
+/* Content Cards */
+.timeline-content {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(100, 255, 218, 0.1);
+    border-radius: 16px;
+    padding: 2.5rem;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.timeline-content:hover {
+    transform: translateY(-5px);
+    border-color: rgba(100, 255, 218, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.timeline-content.left {
+    text-align: right;
+}
+
+.timeline-content.right {
+    text-align: left;
+}
+
+.phase-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: rgba(0, 212, 170, 0.2);
+    color: var(--accent-cyan);
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.phase-badge.current {
+    background: var(--alert-orange);
+    color: white;
+}
+
+.timeline-content h3 {
+    font-size: 1.8rem;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.institution {
+    display: block;
+    color: var(--accent-cyan);
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+}
+
+.duration {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    margin-bottom: 1.5rem;
+}
+
+.timeline-content p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+}
+
+.tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.timeline-content.left .tech-stack {
+    justify-content: flex-end;
+}
+
+.tech-tag {
+    padding: 0.4rem 0.8rem;
+    background: rgba(100, 255, 218, 0.1);
+    border: 1px solid rgba(100, 255, 218, 0.2);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    color: var(--accent-cyan);
+}
+
+.key-paper {
+    padding: 1rem;
+    background: rgba(0, 212, 170, 0.05);
+    border-left: 3px solid var(--accent-cyan);
+    border-radius: 0 8px 8px 0;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
+
+.timeline-content.left .key-paper {
+    border-left: none;
+    border-right: 3px solid var(--accent-cyan);
+    border-radius: 8px 0 0 8px;
+    text-align: right;
+}
+
+/* Visual Containers */
+.timeline-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.viz-container {
+    width: 100%;
+    height: 250px;
+    background: rgba(10, 25, 47, 0.5);
+    border: 1px solid rgba(100, 255, 218, 0.1);
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+.viz-container.active {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 30px rgba(0, 212, 170, 0.2);
+}
+
+.phase-canvas {
+    width: 100%;
+    height: 100%;
+}
+
+.viz-label {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.live-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--alert-orange);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    animation: blink 2s infinite;
+}
+
+/* Research Areas Grid */
+.research-areas {
+    margin-top: 8rem;
+}
+
+.subheading {
+    text-align: center;
+    font-size: 2rem;
+    color: var(--text-primary);
+    margin-bottom: 3rem;
+}
+
+.domains-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.domain-card {
+    background: var(--glass-bg);
+    border: 1px solid rgba(100, 255, 218, 0.1);
+    border-radius: 16px;
+    padding: 2.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.domain-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--accent-cyan);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.domain-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(100, 255, 218, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.domain-card:hover::before {
+    transform: scaleX(1);
+}
+
+.domain-icon {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+}
+
+.domain-card h4 {
+    font-size: 1.3rem;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+.domain-card p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.domain-status {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: rgba(0, 212, 170, 0.1);
+    color: var(--accent-cyan);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+    .timeline-container {
+        padding-left: 2rem;
+    }
+    
+    .timeline-line {
+        left: 20px;
+    }
+    
+    .timeline-item {
+        grid-template-columns: 40px 1fr;
+        gap: 1.5rem;
+    }
+    
+    .timeline-node {
+        grid-column: 1;
+    }
+    
+    .timeline-content,
+    .timeline-visual {
+        grid-column: 2;
+    }
+    
+    .timeline-content.left,
+    .timeline-content.right {
+        text-align: left;
+    }
+    
+    .timeline-content.left .tech-stack {
+        justify-content: flex-start;
+    }
+    
+    .timeline-content.left .key-paper {
+        border-left: 3px solid var(--accent-cyan);
+        border-right: none;
+        border-radius: 0 8px 8px 0;
+        text-align: left;
+    }
+    
+    .timeline-visual {
+        display: none;
+    }
+}
+</style>
+
+<script>
+// Research Pipeline Animations
+document.addEventListener('DOMContentLoaded', function() {
+    // Intersection Observer for scroll animations
+    const observerOptions = {
+        threshold: 0.3,
+        rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                updateTimelineProgress();
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.timeline-item').forEach(item => {
+        observer.observe(item);
+    });
+
+    // Timeline progress bar
+    function updateTimelineProgress() {
+        const timeline = document.querySelector('.timeline-container');
+        const progress = document.getElementById('timeline-progress');
+        const rect = timeline.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        
+        if (rect.top < windowHeight && rect.bottom > 0) {
+            const visible = Math.min(Math.max(windowHeight - rect.top, 0), rect.height);
+            const percent = (visible / rect.height) * 100;
+            progress.style.height = percent + '%';
+        }
+    }
+
+    window.addEventListener('scroll', updateTimelineProgress);
+
+    // Phase 1: Frequency Domain Visualization (Sine waves)
+    const canvas1 = document.getElementById('phase1-canvas');
+    if (canvas1) {
+        const ctx1 = canvas1.getContext('2d');
+        canvas1.width = canvas1.offsetWidth;
+        canvas1.height = canvas1.offsetHeight;
+        let time1 = 0;
+
+        function animatePhase1() {
+            ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
+            ctx1.strokeStyle = 'rgba(0, 212, 170, 0.8)';
+            ctx1.lineWidth = 2;
+            ctx1.beginPath();
+            
+            for (let x = 0; x < canvas1.width; x++) {
+                const y = canvas1.height / 2 + Math.sin(x * 0.05 + time1) * 30 * Math.sin(time1 * 0.5);
+                x === 0 ? ctx1.moveTo(x, y) : ctx1.lineTo(x, y);
+            }
+            ctx1.stroke();
+            
+            // Draw second wave (attack signal)
+            ctx1.strokeStyle = 'rgba(255, 107, 53, 0.6)';
+            ctx1.beginPath();
+            for (let x = 0; x < canvas1.width; x++) {
+                const y = canvas1.height / 2 + Math.sin(x * 0.05 + time1 + 2) * 20;
+                x === 0 ? ctx1.moveTo(x, y) : ctx1.lineTo(x, y);
+            }
+            ctx1.stroke();
+            
+            time1 += 0.05;
+            requestAnimationFrame(animatePhase1);
+        }
+        animatePhase1();
+    }
+
+    // Phase 2: Attack Detection Visualization (Grid with scanning)
+    const canvas2 = document.getElementById('phase2-canvas');
+    if (canvas2) {
+        const ctx2 = canvas2.getContext('2d');
+        canvas2.width = canvas2.offsetWidth;
+        canvas2.height = canvas2.offsetHeight;
+        let scanX = 0;
+        const threats = [
+            {x: 100, y: 80, detected: false},
+            {x: 200, y: 150, detected: false},
+            {x: 150, y: 120, detected: false}
+        ];
+
+        function animatePhase2() {
+            ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
+            
+            // Draw grid
+            ctx2.strokeStyle = 'rgba(100, 255, 218, 0.1)';
+            for (let x = 0; x < canvas2.width; x += 20) {
+                ctx2.beginPath(); ctx2.moveTo(x, 0); ctx2.lineTo(x, canvas2.height); ctx2.stroke();
+            }
+            for (let y = 0; y < canvas2.height; y += 20) {
+                ctx2.beginPath(); ctx2.moveTo(0, y); ctx2.lineTo(canvas2.width, y); ctx2.stroke();
+            }
+            
+            // Scanning line
+            ctx2.strokeStyle = 'rgba(0, 212, 170, 0.8)';
+            ctx2.lineWidth = 2;
+            ctx2.beginPath();
+            ctx2.moveTo(scanX, 0);
+            ctx2.lineTo(scanX, canvas2.height);
+            ctx2.stroke();
+            
+            // Check threats
+            threats.forEach(t => {
+                if (Math.abs(t.x - scanX) < 10) t.detected = true;
+                
+                if (t.detected) {
+                    // Red alert for detected threat
+                    ctx2.fillStyle = 'rgba(255, 107, 53, 0.8)';
+                    ctx2.beginPath();
+                    ctx2.arc(t.x, t.y, 5, 0, Math.PI * 2);
+                    ctx2.fill();
+                    
+                    // Detection ring
+                    ctx2.strokeStyle = 'rgba(255, 107, 53, 0.5)';
+                    ctx2.beginPath();
+                    ctx2.arc(t.x, t.y, 15 + Math.sin(Date.now() * 0.01) * 5, 0, Math.PI * 2);
+                    ctx2.stroke();
+                } else {
+                    // Hidden threat
+                    ctx2.fillStyle = 'rgba(255, 107, 53, 0.3)';
+                    ctx2.beginPath();
+                    ctx2.arc(t.x, t.y, 3, 0, Math.PI * 2);
+                    ctx2.fill();
+                }
+            });
+            
+            scanX += 2;
+            if (scanX > canvas2.width) {
+                scanX = 0;
+                threats.forEach(t => t.detected = false);
+            }
+            
+            requestAnimationFrame(animatePhase2);
+        }
+        animatePhase2();
+    }
+
+    // Phase 3: Live Digital Twin Sync (Particles syncing)
+    const canvas3 = document.getElementById('phase3-canvas');
+    if (canvas3) {
+        const ctx3 = canvas3.getContext('2d');
+        canvas3.width = canvas3.offsetWidth;
+        canvas3.height = canvas3.offsetHeight;
+        
+        const agents = [];
+        for (let i = 0; i < 8; i++) {
+            agents.push({
+                x: Math.random() * canvas3.width,
+                y: Math.random() * canvas3.height,
+                tx: Math.random() * canvas3.width, // target x (digital twin)
+                ty: Math.random() * canvas3.height,
+                sync: Math.random()
+            });
+        }
+
+        function animatePhase3() {
+            ctx3.clearRect(0, 0, canvas3.width, canvas3.height);
+            
+            agents.forEach(a => {
+                // Update target (digital twin moves)
+                if (Math.random() < 0.02) {
+                    a.tx = Math.random() * canvas3.width;
+                    a.ty = Math.random() * canvas3.height;
+                }
+                
+                // Physical agent moves toward twin (sync)
+                const dx = a.tx - a.x;
+                const dy = a.ty - a.y;
+                a.x += dx * 0.05;
+                a.y += dy * 0.05;
+                a.sync = 1 - Math.sqrt(dx*dx + dy*dy) / 200;
+                
+                // Draw connection
+                ctx3.strokeStyle = `rgba(0, 212, 170, ${a.sync * 0.5})`;
+                ctx3.lineWidth = 1;
+                ctx3.beginPath();
+                ctx3.moveTo(a.x, a.y);
+                ctx3.lineTo(a.tx, a.ty);
+                ctx3.stroke();
+                
+                // Draw physical
+                ctx3.fillStyle = '#00D4AA';
+                ctx3.beginPath();
+                ctx3.arc(a.x, a.y, 4, 0, Math.PI * 2);
+                ctx3.fill();
+                
+                // Draw twin
+                ctx3.fillStyle = 'rgba(100, 255, 218, 0.4)';
+                ctx3.beginPath();
+                ctx3.arc(a.tx, a.ty, 3, 0, Math.PI * 2);
+                ctx3.fill();
+            });
+            
+            requestAnimationFrame(animatePhase3);
+        }
+        animatePhase3();
+    }
+});
+</script>
     </section>
 
     <script>
