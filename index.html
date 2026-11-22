@@ -1,1465 +1,1717 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dr. Zahoor Ahmed | Digital Twin & Resilient Control</title>
-    <style>
-        :root {
-            --primary-navy: #0A192F;
-            --accent-cyan: #00D4AA;
-            --alert-orange: #FF6B35;
-            --text-primary: #E6F1FF;
-            --text-secondary: #8892B0;
-            --glass-bg: rgba(10, 25, 47, 0.7);
-            --grid-line: rgba(100, 255, 218, 0.1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background-color: var(--primary-navy);
-            color: var(--text-primary);
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 1.5rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1000;
-            background: linear-gradient(to bottom, rgba(10,25,47,0.9), transparent);
-            backdrop-filter: blur(10px);
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--accent-cyan);
-            text-decoration: none;
-            letter-spacing: -0.5px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2.5rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--text-primary);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: color 0.3s;
-            position: relative;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent-cyan);
-            transition: width 0.3s;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        /* Hero Section */
-        .hero {
-            position: relative;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 0 5%;
-            overflow: hidden;
-        }
-
-        #digital-twin-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 800px;
-            animation: fadeInUp 1s ease-out;
-        }
-
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: rgba(255, 107, 53, 0.1);
-            border: 1px solid var(--alert-orange);
-            border-radius: 50px;
-            font-size: 0.85rem;
-            color: var(--alert-orange);
-            margin-bottom: 2rem;
-            animation: pulse 2s infinite;
-        }
-
-        .pulse-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--alert-orange);
-            border-radius: 50%;
-            animation: blink 1.5s infinite;
-        }
-
-        h1 {
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(to right, var(--text-primary) 60%, var(--accent-cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .subtitle {
-            font-size: clamp(1.1rem, 2vw, 1.5rem);
-            color: var(--text-secondary);
-            margin-bottom: 2.5rem;
-            max-width: 600px;
-            font-weight: 400;
-        }
-
-        .highlight {
-            color: var(--accent-cyan);
-            font-weight: 600;
-        }
-
-        .cta-group {
-            display: flex;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 1rem 2rem;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-primary {
-            background: var(--accent-cyan);
-            color: var(--primary-navy);
-            box-shadow: 0 10px 30px -10px rgba(0, 212, 170, 0.5);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 20px 40px -10px rgba(0, 212, 170, 0.6);
-        }
-
-        .btn-secondary {
-            border: 2px solid var(--text-secondary);
-            color: var(--text-primary);
-            background: transparent;
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--accent-cyan);
-            color: var(--accent-cyan);
-            background: rgba(0, 212, 170, 0.05);
-        }
-
-        /* Digital Twin Info Card */
-        .twin-status-card {
-            position: absolute;
-            right: 5%;
-            bottom: 10%;
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(100, 255, 218, 0.2);
-            border-radius: 16px;
-            padding: 2rem;
-            z-index: 3;
-            max-width: 350px;
-            animation: slideInRight 1s ease-out 0.5s both;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        }
-
-        .twin-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(100, 255, 218, 0.1);
-        }
-
-        .twin-title {
-            font-size: 0.9rem;
-            color: var(--accent-cyan);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 600;
-        }
-
-        .live-indicator {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.8rem;
-            color: #00ff00;
-        }
-
-        .live-dot {
-            width: 8px;
-            height: 8px;
-            background: #00ff00;
-            border-radius: 50%;
-            animation: blink 1s infinite;
-        }
-
-        .twin-metrics {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-        }
-
-        .metric {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-        }
-
-        .metric-label {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .metric-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            font-variant-numeric: tabular-nums;
-        }
-
-        .metric-value.safe {
-            color: var(--accent-cyan);
-        }
-
-        .metric-value.warning {
-            color: var(--alert-orange);
-        }
-
-        .sync-bar {
-            grid-column: span 2;
-            height: 6px;
-            background: rgba(100, 255, 218, 0.1);
-            border-radius: 3px;
-            overflow: hidden;
-            margin-top: 0.5rem;
-        }
-
-        .sync-progress {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent-cyan), #64ffda);
-            width: 98%;
-            transition: width 0.5s ease;
-            box-shadow: 0 0 10px rgba(0, 212, 170, 0.5);
-        }
-
-        .attack-alert {
-            grid-column: span 2;
-            margin-top: 1rem;
-            padding: 1rem;
-            background: rgba(255, 107, 53, 0.1);
-            border-left: 3px solid var(--alert-orange);
-            border-radius: 4px;
-            font-size: 0.85rem;
-            display: none;
-            animation: slideDown 0.3s ease-out;
-        }
-
-        .attack-alert.active {
-            display: block;
-        }
-
-        /* Scroll Indicator */
-        .scroll-indicator {
-            position: absolute;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 2;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--text-secondary);
-            font-size: 0.8rem;
-            opacity: 0.7;
-        }
-
-        .mouse {
-            width: 25px;
-            height: 40px;
-            border: 2px solid var(--text-secondary);
-            border-radius: 12px;
-            position: relative;
-        }
-
-        .mouse::before {
-            content: '';
-            position: absolute;
-            top: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 4px;
-            height: 8px;
-            background: var(--accent-cyan);
-            border-radius: 2px;
-            animation: scrollWheel 2s infinite;
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-
-        @keyframes scrollWheel {
-            0% { opacity: 1; transform: translateX(-50%) translateY(0); }
-            100% { opacity: 0; transform: translateX(-50%) translateY(15px); }
-        }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Responsive */
-        @media (max-width: 968px) {
-            .twin-status-card {
-                display: none;
-            }
-            
-            .nav-links {
-                display: none;
-            }
-            
-            .hero {
-                padding-top: 20vh;
-                align-items: flex-start;
-            }
-        }
-    </style>
-</head>
-<body>
-
-    <nav>
-        <a href="#" class="logo">ZA.</a>
-        <ul class="nav-links">
-            <li><a href="#research">Research</a></li>
-            <li><a href="#publications">Publications</a></li>
-            <li><a href="#lab">Lab</a></li>
-            <li><a href="#teaching">Teaching</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-    </nav>
-
-    <section class="hero">
-        <canvas id="digital-twin-canvas"></canvas>
-        
-        <div class="hero-content">
-            <div class="status-badge">
-                <span class="pulse-dot"></span>
-                Recruiting PhD/MSc Students - Digital Twin Security
-            </div>
-            
-            <h1>
-                Securing Autonomous Systems through <span class="highlight">Digital Twin</span> Intelligence
-            </h1>
-            
-            <p class="subtitle">
-                Assistant Professor at Shanghai University of Electric Power | 
-                Specializing in Resilient Consensus Control, Cyber-Attack Detection, 
-                and Multi-Agent Systems (UAVs, ASVs, Smart Grids)
-            </p>
-            
-            <div class="cta-group">
-                <a href="#research" class="btn btn-primary">View Research Lab</a>
-                <a href="mailto:zahoor@shiep.edu.cn?subject=Collaboration%20Inquiry%20-%20Digital%20Twin" class="btn btn-secondary">Collaborate</a>
-            </div>
-        </div>
-
-        <div class="twin-status-card">
-            <div class="twin-header">
-                <span class="twin-title">Digital Twin Status</span>
-                <div class="live-indicator">
-                    <span class="live-dot"></span>
-                    LIVE
-                </div>
-            </div>
-            
-            <div class="twin-metrics">
-                <div class="metric">
-                    <span class="metric-label">Sync Accuracy</span>
-                    <span class="metric-value safe" id="sync-acc">98.4%</span>
-                </div>
-                <div class="metric">
-                    <span class="metric-label">Agents Online</span>
-                    <span class="metric-value" id="agent-count">12/12</span>
-                </div>
-                <div class="metric">
-                    <span class="metric-label">Latency</span>
-                    <span class="metric-value safe" id="latency">12ms</span>
-                </div>
-                <div class="metric">
-                    <span class="metric-label">Threat Level</span>
-                    <span class="metric-value" id="threat-level">LOW</span>
-                </div>
-                <div class="sync-bar">
-                    <div class="sync-progress" id="sync-bar"></div>
-                </div>
-                <div class="attack-alert" id="attack-alert">
-                    <strong>⚠️ Attack Detected:</strong> FDI on Agent #7. Resilient consensus protocol activated.
-                </div>
-            </div>
-        </div>
-
-        <div class="scroll-indicator">
-            <div class="mouse"></div>
-            <span>Scroll to explore</span>
-        </div>
-<!-- Research Pipeline Section -->
-<section id="research-pipeline" class="pipeline-section">
-    <div class="container">
-        <div class="section-header">
-            <span class="section-tag">Research Evolution</span>
-            <h2 class="section-title">The Digital Thread</h2>
-            <p class="section-subtitle">From theoretical foundations to real-world autonomous systems security</p>
-        </div>
-
-        <div class="timeline-container">
-            <!-- Timeline Line -->
-            <div class="timeline-line">
-                <div class="timeline-progress" id="timeline-progress"></div>
-            </div>
-
-            <!-- Phase 1: PhD -->
-            <div class="timeline-item" data-phase="1">
-                <div class="timeline-content left">
-                    <div class="phase-badge">Phase 01</div>
-                    <h3>Frequency Domain Foundations</h3>
-                    <span class="institution">Ph.D. | Shanghai Jiao Tong University</span>
-                    <span class="duration">2017 – 2022</span>
-                    <p>Developed resilient consensus algorithms for delayed multi-agent systems using frequency-domain analysis. Established mathematical frameworks for H∞ control under deception attacks.</p>
-                    <div class="tech-stack">
-                        <span class="tech-tag">Delay Systems</span>
-                        <span class="tech-tag">H∞ Control</span>
-                        <span class="tech-tag">Consensus Theory</span>
-                    </div>
-                    <div class="key-paper">
-                        <strong>Key Output:</strong> Frequency-domain resilient consensus under IMP-based attacks (Automatica)
-                    </div>
-                </div>
-                <div class="timeline-node">
-                    <div class="node-dot"></div>
-                    <div class="node-pulse"></div>
-                </div>
-                <div class="timeline-visual right">
-                    <div class="viz-container">
-                        <canvas id="phase1-canvas" class="phase-canvas"></canvas>
-                        <div class="viz-label">Frequency Response Analysis</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Phase 2: Postdoc -->
-            <div class="timeline-item" data-phase="2">
-                <div class="timeline-visual left">
-                    <div class="viz-container">
-                        <canvas id="phase2-canvas" class="phase-canvas"></canvas>
-                        <div class="viz-label">Attack Detection Module</div>
-                    </div>
-                </div>
-                <div class="timeline-node">
-                    <div class="node-dot"></div>
-                    <div class="node-pulse"></div>
-                </div>
-                <div class="timeline-content right">
-                    <div class="phase-badge">Phase 02</div>
-                    <h3>Cyber-Attack Detection</h3>
-                    <span class="institution">Postdoctoral Fellow | Shanghai Jiao Tong University</span>
-                    <span class="duration">2022 – 2024</span>
-                    <p>Developed Digital Twin-based attack detection for autonomous systems. Created state estimation methods to identify False Data Injection (FDI) and replay attacks in real-time.</p>
-                    <div class="tech-stack">
-                        <span class="tech-tag">Digital Twin</span>
-                        <span class="tech-tag">FDI Detection</span>
-                        <span class="tech-tag">State Estimation</span>
-                    </div>
-                    <div class="key-paper">
-                        <strong>Key Output:</strong> Digital Twin based Attack Detection for ASVs (IEEE TVT)
-                    </div>
-                </div>
-            </div>
-
-            <!-- Phase 3: Faculty -->
-            <div class="timeline-item" data-phase="3">
-                <div class="timeline-content left">
-                    <div class="phase-badge current">Phase 03</div>
-                    <h3>Digital Twin Resilience</h3>
-                    <span class="institution">Assistant Professor | Shanghai University of Electric Power</span>
-                    <span class="duration">2025 – Present</span>
-                    <p>Leading NSFC-funded research on Digital Twin cyber-attack detection and resilient consensus control for multi-agent systems including UAVs, ASVs, and smart grids.</p>
-                    <div class="tech-stack">
-                        <span class="tech-tag">UAV Swarms</span>
-                        <span class="tech-tag">Smart Grid</span>
-                        <span class="tech-tag">Resilient Control</span>
-                    </div>
-                    <div class="key-paper">
-                        <strong>Current:</strong> NSFC-RFIS Project (¥400K) | Digital Twin Resilient Consensus
-                    </div>
-                </div>
-                <div class="timeline-node">
-                    <div class="node-dot current"></div>
-                    <div class="node-pulse current"></div>
-                </div>
-                <div class="timeline-visual right">
-                    <div class="viz-container active">
-                        <canvas id="phase3-canvas" class="phase-canvas"></canvas>
-                        <div class="viz-label">Live Digital Twin Sync</div>
-                        <div class="live-badge">ACTIVE</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Research Areas Grid -->
-        <div class="research-areas">
-            <h3 class="subheading">Current Research Domains</h3>
-            <div class="domains-grid">
-                <div class="domain-card" data-domain="uav">
-                    <div class="domain-icon">🚁</div>
-                    <h4>UAV Swarms</h4>
-                    <p>Resilient consensus control for unmanned aerial vehicles under cyber-attacks using graph-aware digital twins.</p>
-                    <div class="domain-status">Active Research</div>
-                </div>
-                <div class="domain-card" data-domain="asv">
-                    <div class="domain-icon">🚢</div>
-                    <h4>Autonomous Surface Vehicles</h4>
-                    <p>Digital twin-based trajectory tracking and attack detection for marine autonomous systems.</p>
-                    <div class="domain-status">Active Research</div>
-                </div>
-                <div class="domain-card" data-domain="grid">
-                    <div class="domain-icon">⚡</div>
-                    <h4>Smart Grids</h4>
-                    <p>Cross-domain microgrid collaborative control and distributed energy optimization with privacy protection.</p>
-                    <div class="domain-status">NSFC Funded</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<style>
-/* Research Pipeline Section Styles */
-.pipeline-section {
-    padding: 8rem 5%;
-    background: linear-gradient(to bottom, var(--primary-navy), #0d1b2a);
-    position: relative;
-    overflow: hidden;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.section-header {
-    text-align: center;
-    margin-bottom: 6rem;
-}
-
-.section-tag {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    background: rgba(0, 212, 170, 0.1);
-    border: 1px solid var(--accent-cyan);
-    border-radius: 50px;
-    color: var(--accent-cyan);
-    font-size: 0.85rem;
-    margin-bottom: 1rem;
-}
-
-.section-title {
-    font-size: 3rem;
-    color: var(--text-primary);
-    margin-bottom: 1rem;
-    font-weight: 800;
-}
-
-.section-subtitle {
-    color: var(--text-secondary);
-    font-size: 1.2rem;
-}
-
-/* Timeline Container */
-.timeline-container {
-    position: relative;
-    padding: 2rem 0;
-}
-
-.timeline-line {
-    position: absolute;
-    left: 50%;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: rgba(100, 255, 218, 0.1);
-    transform: translateX(-50%);
-}
-
-.timeline-progress {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 0%;
-    background: linear-gradient(to bottom, var(--accent-cyan), #64ffda);
-    box-shadow: 0 0 20px rgba(0, 212, 170, 0.5);
-    transition: height 0.5s ease;
-}
-
-/* Timeline Items */
-.timeline-item {
-    display: grid;
-    grid-template-columns: 1fr 80px 1fr;
-    gap: 2rem;
-    margin-bottom: 6rem;
-    position: relative;
-    opacity: 0;
-    transform: translateY(50px);
-    transition: all 0.6s ease;
-}
-
-.timeline-item.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.timeline-node {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.node-dot {
-    width: 20px;
-    height: 20px;
-    background: var(--primary-navy);
-    border: 3px solid var(--accent-cyan);
-    border-radius: 50%;
-    z-index: 2;
-    position: relative;
-}
-
-.node-dot.current {
-    background: var(--accent-cyan);
-    box-shadow: 0 0 20px var(--accent-cyan);
-}
-
-.node-pulse {
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    background: rgba(0, 212, 170, 0.3);
-    border-radius: 50%;
-    animation: pulse-ring 2s infinite;
-}
-
-.node-pulse.current {
-    background: rgba(0, 212, 170, 0.5);
-}
-
-@keyframes pulse-ring {
-    0% { transform: scale(0.8); opacity: 1; }
-    100% { transform: scale(1.5); opacity: 0; }
-}
-
-/* Content Cards */
-.timeline-content {
-    background: var(--glass-bg);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(100, 255, 218, 0.1);
-    border-radius: 16px;
-    padding: 2.5rem;
-    position: relative;
-    transition: all 0.3s ease;
-}
-
-.timeline-content:hover {
-    transform: translateY(-5px);
-    border-color: rgba(100, 255, 218, 0.3);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-}
-
-.timeline-content.left {
-    text-align: right;
-}
-
-.timeline-content.right {
-    text-align: left;
-}
-
-.phase-badge {
-    display: inline-block;
-    padding: 0.25rem 0.75rem;
-    background: rgba(0, 212, 170, 0.2);
-    color: var(--accent-cyan);
-    font-size: 0.75rem;
-    font-weight: 600;
-    border-radius: 4px;
-    margin-bottom: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.phase-badge.current {
-    background: var(--alert-orange);
-    color: white;
-}
-
-.timeline-content h3 {
-    font-size: 1.8rem;
-    color: var(--text-primary);
-    margin-bottom: 0.5rem;
-    font-weight: 700;
-}
-
-.institution {
-    display: block;
-    color: var(--accent-cyan);
-    font-size: 0.95rem;
-    margin-bottom: 0.25rem;
-    font-weight: 500;
-}
-
-.duration {
-    display: block;
-    color: var(--text-secondary);
-    font-size: 0.85rem;
-    margin-bottom: 1.5rem;
-}
-
-.timeline-content p {
-    color: var(--text-secondary);
-    line-height: 1.7;
-    margin-bottom: 1.5rem;
-}
-
-.tech-stack {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-}
-
-.timeline-content.left .tech-stack {
-    justify-content: flex-end;
-}
-
-.tech-tag {
-    padding: 0.4rem 0.8rem;
-    background: rgba(100, 255, 218, 0.1);
-    border: 1px solid rgba(100, 255, 218, 0.2);
-    border-radius: 20px;
-    font-size: 0.8rem;
-    color: var(--accent-cyan);
-}
-
-.key-paper {
-    padding: 1rem;
-    background: rgba(0, 212, 170, 0.05);
-    border-left: 3px solid var(--accent-cyan);
-    border-radius: 0 8px 8px 0;
-    font-size: 0.9rem;
-    color: var(--text-primary);
-}
-
-.timeline-content.left .key-paper {
-    border-left: none;
-    border-right: 3px solid var(--accent-cyan);
-    border-radius: 8px 0 0 8px;
-    text-align: right;
-}
-
-/* Visual Containers */
-.timeline-visual {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.viz-container {
-    width: 100%;
-    height: 250px;
-    background: rgba(10, 25, 47, 0.5);
-    border: 1px solid rgba(100, 255, 218, 0.1);
-    border-radius: 12px;
-    position: relative;
-    overflow: hidden;
-}
-
-.viz-container.active {
-    border-color: var(--accent-cyan);
-    box-shadow: 0 0 30px rgba(0, 212, 170, 0.2);
-}
-
-.phase-canvas {
-    width: 100%;
-    height: 100%;
-}
-
-.viz-label {
-    position: absolute;
-    bottom: 1rem;
-    left: 1rem;
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.live-badge {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: var(--alert-orange);
-    color: white;
-    padding: 0.25rem 0.75rem;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    animation: blink 2s infinite;
-}
-
-/* Research Areas Grid */
-.research-areas {
-    margin-top: 8rem;
-}
-
-.subheading {
-    text-align: center;
-    font-size: 2rem;
-    color: var(--text-primary);
-    margin-bottom: 3rem;
-}
-
-.domains-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-}
-
-.domain-card {
-    background: var(--glass-bg);
-    border: 1px solid rgba(100, 255, 218, 0.1);
-    border-radius: 16px;
-    padding: 2.5rem;
-    text-align: center;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.domain-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    background: var(--accent-cyan);
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
-}
-
-.domain-card:hover {
-    transform: translateY(-10px);
-    border-color: rgba(100, 255, 218, 0.3);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-}
-
-.domain-card:hover::before {
-    transform: scaleX(1);
-}
-
-.domain-icon {
-    font-size: 3rem;
-    margin-bottom: 1.5rem;
-}
-
-.domain-card h4 {
-    font-size: 1.3rem;
-    color: var(--text-primary);
-    margin-bottom: 1rem;
-}
-
-.domain-card p {
-    color: var(--text-secondary);
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
-}
-
-.domain-status {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    background: rgba(0, 212, 170, 0.1);
-    color: var(--accent-cyan);
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 600;
-}
-
-/* Responsive */
-@media (max-width: 968px) {
-    .timeline-container {
-        padding-left: 2rem;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dr. Zahoor Ahmed | Digital Twin & Resilient Control</title>
+  <meta name="description" content="Assistant Professor at Shanghai University of Electric Power. Research on Digital Twin cyber-attack detection and resilient consensus control for multi-agent systems (UAVs, ASVs, smart grids)." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary-navy: #0A192F;
+      --primary-navy-2: #0d1b2a;
+      --accent-cyan: #00D4AA;
+      --accent-cyan-light: #64ffda;
+      --alert-orange: #FF6B35;
+      --text-primary: #E6F1FF;
+      --text-secondary: #8892B0;
+      --glass-bg: rgba(10, 25, 47, 0.7);
+      --grid-line: rgba(100, 255, 218, 0.1);
+      --border-soft: rgba(100, 255, 218, 0.1);
+      --border-strong: rgba(100, 255, 218, 0.3);
     }
-    
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--primary-navy);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ---------- Navigation ---------- */
+    nav {
+      position: fixed;
+      top: 0; width: 100%;
+      padding: 1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      background: linear-gradient(to bottom, rgba(10,25,47,0.95), rgba(10,25,47,0.6));
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    nav.scrolled {
+      border-bottom-color: var(--border-soft);
+      background: rgba(10,25,47,0.95);
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--accent-cyan);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      align-items: center;
+    }
+    .nav-links a {
+      color: var(--text-primary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.3s;
+      position: relative;
+      padding: 0.25rem 0;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 2px;
+      background: var(--accent-cyan);
+      transition: width 0.3s;
+    }
+    .nav-links a:hover { color: var(--accent-cyan); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .nav-toggle {
+      display: none;
+      background: none; border: none; cursor: pointer;
+      color: var(--text-primary); font-size: 1.6rem;
+      padding: 0.25rem 0.5rem;
+    }
+
+    /* ---------- Buttons ---------- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.9rem 1.8rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .btn-primary {
+      background: var(--accent-cyan);
+      color: var(--primary-navy);
+      box-shadow: 0 10px 30px -10px rgba(0, 212, 170, 0.5);
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 40px -10px rgba(0, 212, 170, 0.6);
+    }
+    .btn-secondary {
+      border-color: var(--text-secondary);
+      color: var(--text-primary);
+      background: transparent;
+    }
+    .btn-secondary:hover {
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+      background: rgba(0, 212, 170, 0.05);
+    }
+
+    /* ---------- Hero ---------- */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 7rem 5% 4rem;
+      overflow: hidden;
+    }
+    #digital-twin-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 760px;
+      animation: fadeInUp 1s ease-out both;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: rgba(255, 107, 53, 0.1);
+      border: 1px solid var(--alert-orange);
+      border-radius: 50px;
+      font-size: 0.85rem;
+      color: var(--alert-orange);
+      margin-bottom: 1.75rem;
+    }
+    .pulse-dot {
+      width: 8px; height: 8px;
+      background: var(--alert-orange);
+      border-radius: 50%;
+      animation: blink 1.5s infinite;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 5.5vw, 4rem);
+      font-weight: 800;
+      line-height: 1.12;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(to right, var(--text-primary) 60%, var(--accent-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subtitle {
+      font-size: clamp(1rem, 1.8vw, 1.25rem);
+      color: var(--text-secondary);
+      margin-bottom: 2.25rem;
+      max-width: 620px;
+    }
+    .highlight { color: var(--accent-cyan); font-weight: 600; }
+
+    .cta-group { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    /* ---------- Twin Status Card ---------- */
+    .twin-status-card {
+      position: absolute;
+      right: 5%; bottom: 8%;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(100, 255, 218, 0.2);
+      border-radius: 16px;
+      padding: 1.75rem;
+      z-index: 3;
+      width: 340px;
+      animation: slideInRight 1s ease-out 0.4s both;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+    .twin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.85rem;
+      border-bottom: 1px solid var(--border-soft);
+    }
+    .twin-title {
+      font-size: 0.8rem;
+      color: var(--accent-cyan);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+    .live-indicator {
+      display: flex; align-items: center; gap: 0.4rem;
+      font-size: 0.75rem; color: #00ff88;
+    }
+    .live-dot {
+      width: 8px; height: 8px;
+      background: #00ff88; border-radius: 50%;
+      animation: blink 1s infinite;
+    }
+    .twin-metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+    .metric { display: flex; flex-direction: column; gap: 0.15rem; }
+    .metric-label {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .metric-value {
+      font-size: 1.4rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+    .metric-value.safe { color: var(--accent-cyan); }
+    .metric-value.warning { color: var(--alert-orange); }
+
+    .sync-bar {
+      grid-column: span 2;
+      height: 6px;
+      background: rgba(100, 255, 218, 0.1);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 0.25rem;
+    }
+    .sync-progress {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-cyan-light));
+      width: 98%;
+      transition: width 0.5s ease;
+      box-shadow: 0 0 10px rgba(0, 212, 170, 0.5);
+    }
+    .attack-alert {
+      grid-column: span 2;
+      margin-top: 0.85rem;
+      padding: 0.85rem;
+      background: rgba(255, 107, 53, 0.1);
+      border-left: 3px solid var(--alert-orange);
+      border-radius: 4px;
+      font-size: 0.8rem;
+      display: none;
+    }
+    .attack-alert.active { display: block; animation: slideDown 0.3s ease-out; }
+
+    /* ---------- Scroll Indicator ---------- */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 1.75rem; left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      color: var(--text-secondary);
+      font-size: 0.75rem; opacity: 0.7;
+    }
+    .mouse {
+      width: 24px; height: 38px;
+      border: 2px solid var(--text-secondary);
+      border-radius: 12px;
+      position: relative;
+    }
+    .mouse::before {
+      content: '';
+      position: absolute;
+      top: 7px; left: 50%;
+      transform: translateX(-50%);
+      width: 4px; height: 8px;
+      background: var(--accent-cyan);
+      border-radius: 2px;
+      animation: scrollWheel 2s infinite;
+    }
+
+    /* ---------- Section base ---------- */
+    section { padding: 6rem 5%; position: relative; }
+    .container { max-width: 1200px; margin: 0 auto; }
+
+    .section-header { text-align: center; margin-bottom: 4rem; }
+    .section-tag {
+      display: inline-block;
+      padding: 0.4rem 0.9rem;
+      background: rgba(0, 212, 170, 0.1);
+      border: 1px solid var(--accent-cyan);
+      border-radius: 50px;
+      color: var(--accent-cyan);
+      font-size: 0.8rem;
+      margin-bottom: 0.85rem;
+      font-weight: 500;
+    }
+    .section-title {
+      font-size: clamp(1.9rem, 4vw, 2.6rem);
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+    }
+    .section-subtitle { color: var(--text-secondary); font-size: 1.05rem; max-width: 640px; margin: 0 auto; }
+
+    /* ---------- Pipeline / Timeline ---------- */
+    .pipeline-section { background: linear-gradient(to bottom, var(--primary-navy), var(--primary-navy-2)); }
+    .timeline-container { position: relative; padding: 2rem 0; }
     .timeline-line {
-        left: 20px;
+      position: absolute;
+      left: 50%; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--border-soft);
+      transform: translateX(-50%);
     }
-    
+    .timeline-progress {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 0%;
+      background: linear-gradient(to bottom, var(--accent-cyan), var(--accent-cyan-light));
+      box-shadow: 0 0 20px rgba(0, 212, 170, 0.5);
+      transition: height 0.4s ease;
+    }
     .timeline-item {
-        grid-template-columns: 40px 1fr;
-        gap: 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr 80px 1fr;
+      gap: 2rem;
+      margin-bottom: 5rem;
+      position: relative;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
     }
-    
-    .timeline-node {
-        grid-column: 1;
+    .timeline-item.visible { opacity: 1; transform: translateY(0); }
+    .timeline-node { display: flex; align-items: center; justify-content: center; position: relative; }
+    .node-dot {
+      width: 20px; height: 20px;
+      background: var(--primary-navy);
+      border: 3px solid var(--accent-cyan);
+      border-radius: 50%;
+      z-index: 2;
+      position: relative;
     }
-    
-    .timeline-content,
-    .timeline-visual {
-        grid-column: 2;
+    .node-dot.current { background: var(--accent-cyan); box-shadow: 0 0 20px var(--accent-cyan); }
+    .node-pulse {
+      position: absolute;
+      width: 40px; height: 40px;
+      background: rgba(0, 212, 170, 0.3);
+      border-radius: 50%;
+      animation: pulse-ring 2s infinite;
     }
-    
-    .timeline-content.left,
-    .timeline-content.right {
-        text-align: left;
+    .node-pulse.current { background: rgba(0, 212, 170, 0.5); }
+
+    .timeline-content {
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--border-soft);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: all 0.3s ease;
     }
-    
-    .timeline-content.left .tech-stack {
-        justify-content: flex-start;
+    .timeline-content:hover {
+      transform: translateY(-5px);
+      border-color: var(--border-strong);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
     }
-    
+    .timeline-content.left { text-align: right; }
+    .timeline-content.right { text-align: left; }
+
+    .phase-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: rgba(0, 212, 170, 0.2);
+      color: var(--accent-cyan);
+      font-size: 0.7rem;
+      font-weight: 600;
+      border-radius: 4px;
+      margin-bottom: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .phase-badge.current { background: var(--alert-orange); color: white; }
+
+    .timeline-content h3 { font-size: 1.5rem; margin-bottom: 0.5rem; font-weight: 700; }
+    .institution { display: block; color: var(--accent-cyan); font-size: 0.9rem; margin-bottom: 0.2rem; font-weight: 500; }
+    .duration { display: block; color: var(--text-secondary); font-size: 0.8rem; margin-bottom: 1.25rem; }
+    .timeline-content p { color: var(--text-secondary); line-height: 1.7; margin-bottom: 1.25rem; font-size: 0.95rem; }
+
+    .tech-stack { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.25rem; }
+    .timeline-content.left .tech-stack { justify-content: flex-end; }
+    .tech-tag {
+      padding: 0.3rem 0.7rem;
+      background: rgba(100, 255, 218, 0.1);
+      border: 1px solid rgba(100, 255, 218, 0.2);
+      border-radius: 20px;
+      font-size: 0.75rem;
+      color: var(--accent-cyan);
+    }
+    .key-paper {
+      padding: 0.85rem;
+      background: rgba(0, 212, 170, 0.05);
+      border-left: 3px solid var(--accent-cyan);
+      border-radius: 0 8px 8px 0;
+      font-size: 0.85rem;
+    }
     .timeline-content.left .key-paper {
+      border-left: none;
+      border-right: 3px solid var(--accent-cyan);
+      border-radius: 8px 0 0 8px;
+      text-align: right;
+    }
+
+    .timeline-visual { display: flex; align-items: center; justify-content: center; }
+    .viz-container {
+      width: 100%; height: 240px;
+      background: rgba(10, 25, 47, 0.5);
+      border: 1px solid var(--border-soft);
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    .viz-container.active {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 30px rgba(0, 212, 170, 0.2);
+    }
+    .phase-canvas { width: 100%; height: 100%; display: block; }
+    .viz-label {
+      position: absolute;
+      bottom: 0.75rem; left: 0.85rem;
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .live-badge {
+      position: absolute;
+      top: 0.75rem; right: 0.85rem;
+      background: var(--alert-orange);
+      color: white;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      animation: blink 2s infinite;
+    }
+
+    /* ---------- Domains grid ---------- */
+    .research-areas { margin-top: 5rem; }
+    .subheading { text-align: center; font-size: 1.75rem; margin-bottom: 2.5rem; }
+    .domains-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .domain-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--border-soft);
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .domain-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: var(--accent-cyan);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    .domain-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--border-strong);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+    .domain-card:hover::before { transform: scaleX(1); }
+    .domain-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+    .domain-card h4 { font-size: 1.15rem; margin-bottom: 0.75rem; }
+    .domain-card p { color: var(--text-secondary); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.9rem; }
+    .domain-status {
+      display: inline-block;
+      padding: 0.4rem 0.9rem;
+      background: rgba(0, 212, 170, 0.1);
+      color: var(--accent-cyan);
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    /* ---------- Publications ---------- */
+    .pub-filters { display: flex; gap: 0.6rem; flex-wrap: wrap; justify-content: center; margin-bottom: 2.5rem; }
+    .filter-btn {
+      padding: 0.5rem 1.1rem;
+      background: transparent;
+      border: 1px solid var(--border-soft);
+      border-radius: 50px;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.3s;
+    }
+    .filter-btn:hover { border-color: var(--accent-cyan); color: var(--accent-cyan); }
+    .filter-btn.active {
+      background: var(--accent-cyan);
+      border-color: var(--accent-cyan);
+      color: var(--primary-navy);
+      font-weight: 600;
+    }
+
+    .pub-list { display: flex; flex-direction: column; gap: 1rem; }
+    .pub-item {
+      background: var(--glass-bg);
+      border: 1px solid var(--border-soft);
+      border-radius: 12px;
+      padding: 1.4rem 1.6rem;
+      transition: all 0.3s;
+      border-left: 3px solid var(--accent-cyan);
+    }
+    .pub-item:hover { border-color: var(--border-strong); transform: translateX(4px); }
+    .pub-item.hidden { display: none; }
+    .pub-authors { font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 0.35rem; }
+    .pub-authors strong { color: var(--text-primary); font-weight: 600; }
+    .pub-title { font-size: 0.95rem; color: var(--text-primary); font-weight: 600; margin-bottom: 0.35rem; line-height: 1.45; }
+    .pub-venue { font-size: 0.85rem; color: var(--accent-cyan); font-style: italic; }
+    .pub-meta { display: flex; gap: 1rem; margin-top: 0.5rem; font-size: 0.78rem; color: var(--text-secondary); flex-wrap: wrap; }
+    .pub-tag {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      background: rgba(0, 212, 170, 0.1);
+      border-radius: 4px;
+      font-size: 0.72rem;
+      color: var(--accent-cyan);
+    }
+    .pub-highlight {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      background: rgba(255, 107, 53, 0.15);
+      color: var(--alert-orange);
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+
+    /* ---------- Projects ---------- */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .project-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--border-soft);
+      border-radius: 16px;
+      padding: 1.75rem;
+      transition: all 0.3s;
+    }
+    .project-card:hover { border-color: var(--border-strong); transform: translateY(-4px); }
+    .project-status {
+      display: inline-block;
+      padding: 0.25rem 0.7rem;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .project-status.active { background: rgba(0, 212, 170, 0.15); color: var(--accent-cyan); }
+    .project-status.completed { background: rgba(136, 146, 176, 0.15); color: var(--text-secondary); }
+    .project-card h4 { font-size: 1.05rem; margin-bottom: 0.5rem; line-height: 1.4; }
+    .project-funder { font-size: 0.85rem; color: var(--accent-cyan); margin-bottom: 0.75rem; }
+    .project-meta { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1rem; }
+    .project-amount {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.75rem;
+    }
+    .project-number {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      font-family: 'Courier New', monospace;
+    }
+
+    /* ---------- Teaching / Awards ---------- */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    .info-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--border-soft);
+      border-radius: 16px;
+      padding: 1.75rem;
+    }
+    .info-card h3 {
+      font-size: 1.15rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .info-card h3 .icon { font-size: 1.3rem; }
+    .info-list { list-style: none; display: flex; flex-direction: column; gap: 0.85rem; }
+    .info-list li {
+      padding-left: 1.25rem;
+      position: relative;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    .info-list li::before {
+      content: '▹';
+      position: absolute;
+      left: 0;
+      color: var(--accent-cyan);
+    }
+    .info-list li strong { color: var(--text-primary); font-weight: 600; display: block; margin-bottom: 0.15rem; }
+
+    /* ---------- Contact ---------- */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+    .contact-item {
+      background: var(--glass-bg);
+      border: 1px solid var(--border-soft);
+      border-radius: 12px;
+      padding: 1.25rem;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    .contact-item:hover { border-color: var(--border-strong); transform: translateY(-3px); }
+    .contact-item .icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .contact-item .label { font-size: 0.72rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.35rem; }
+    .contact-item a {
+      color: var(--accent-cyan);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      word-break: break-word;
+    }
+    .contact-item a:hover { text-decoration: underline; }
+
+    .recruiting-banner {
+      background: linear-gradient(135deg, rgba(255, 107, 53, 0.15), rgba(0, 212, 170, 0.1));
+      border: 1px solid var(--alert-orange);
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: center;
+    }
+    .recruiting-banner h3 { font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--alert-orange); }
+    .recruiting-banner p { color: var(--text-secondary); margin-bottom: 1.25rem; font-size: 0.92rem; }
+
+    /* ---------- Footer ---------- */
+    footer {
+      padding: 2.5rem 5%;
+      text-align: center;
+      border-top: 1px solid var(--border-soft);
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+    }
+    footer a { color: var(--accent-cyan); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ---------- Animations ---------- */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(50px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    @keyframes scrollWheel {
+      0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+      100% { opacity: 0; transform: translateX(-50%) translateY(15px); }
+    }
+    @keyframes pulse-ring {
+      0% { transform: scale(0.8); opacity: 1; }
+      100% { transform: scale(1.5); opacity: 0; }
+    }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 968px) {
+      .nav-links {
+        position: fixed;
+        top: 64px; left: 0;
+        width: 100%;
+        flex-direction: column;
+        background: rgba(10,25,47,0.98);
+        backdrop-filter: blur(12px);
+        padding: 1.5rem 5%;
+        gap: 1.25rem;
+        border-bottom: 1px solid var(--border-soft);
+        transform: translateY(-140%);
+        transition: transform 0.35s ease;
+        align-items: flex-start;
+      }
+      .nav-links.open { transform: translateY(0); }
+      .nav-toggle { display: block; }
+
+      .twin-status-card { display: none; }
+
+      .hero { padding-top: 6rem; align-items: flex-start; min-height: auto; padding-bottom: 4rem; }
+
+      .timeline-container { padding-left: 1.5rem; }
+      .timeline-line { left: 20px; }
+      .timeline-item { grid-template-columns: 40px 1fr; gap: 1.25rem; }
+      .timeline-node { grid-column: 1; }
+      .timeline-content, .timeline-visual { grid-column: 2; }
+      .timeline-content.left, .timeline-content.right { text-align: left; }
+      .timeline-content.left .tech-stack { justify-content: flex-start; }
+      .timeline-content.left .key-paper {
         border-left: 3px solid var(--accent-cyan);
         border-right: none;
         border-radius: 0 8px 8px 0;
         text-align: left;
+      }
+      .timeline-visual { display: none; }
+
+      .two-col { grid-template-columns: 1fr; }
+      .scroll-indicator { display: none; }
     }
-    
-    .timeline-visual {
-        display: none;
+
+    @media (max-width: 480px) {
+      section { padding: 4rem 5%; }
+      .cta-group { flex-direction: column; }
+      .btn { width: 100%; justify-content: center; }
     }
-}
-</style>
 
-<script>
-// Research Pipeline Animations
-document.addEventListener('DOMContentLoaded', function() {
-    // Intersection Observer for scroll animations
-    const observerOptions = {
-        threshold: 0.3,
-        rootMargin: '0px 0px -100px 0px'
-    };
+    /* ---------- Reduced motion ---------- */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                updateTimelineProgress();
-            }
-        });
-    }, observerOptions);
+  <!-- ===================== NAV ===================== -->
+  <nav id="navbar">
+    <a href="#" class="logo">ZA.</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#research">Research</a></li>
+      <li><a href="#publications">Publications</a></li>
+      <li><a href="#lab">Lab</a></li>
+      <li><a href="#teaching">Teaching</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+  </nav>
 
-    document.querySelectorAll('.timeline-item').forEach(item => {
-        observer.observe(item);
+  <!-- ===================== HERO ===================== -->
+  <section class="hero" id="home">
+    <canvas id="digital-twin-canvas" aria-hidden="true"></canvas>
+
+    <div class="hero-content">
+      <div class="status-badge">
+        <span class="pulse-dot"></span>
+        Recruiting PhD / MSc Students — Digital Twin Security
+      </div>
+
+      <h1>Securing Autonomous Systems through <span class="highlight">Digital Twin</span> Intelligence</h1>
+
+      <p class="subtitle">
+        Assistant Professor at Shanghai University of Electric Power ·
+        Research on <span class="highlight">Resilient Consensus Control</span>,
+        <span class="highlight">Cyber-Attack Detection</span>, and
+        <span class="highlight">Multi-Agent Systems</span> (UAVs, ASVs, Smart Grids)
+      </p>
+
+      <div class="cta-group">
+        <a href="#research" class="btn btn-primary">Explore Research Lab</a>
+        <a href="mailto:zahoorgcu10@shiep.edu.cn?subject=Collaboration%20Inquiry%20-%20Digital%20Twin" class="btn btn-secondary">Collaborate</a>
+      </div>
+    </div>
+
+    <div class="twin-status-card" aria-live="polite">
+      <div class="twin-header">
+        <span class="twin-title">Digital Twin Status</span>
+        <div class="live-indicator"><span class="live-dot"></span> LIVE</div>
+      </div>
+      <div class="twin-metrics">
+        <div class="metric">
+          <span class="metric-label">Sync Accuracy</span>
+          <span class="metric-value safe" id="sync-acc">98.4%</span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Agents Online</span>
+          <span class="metric-value" id="agent-count">12/12</span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Latency</span>
+          <span class="metric-value safe" id="latency">12ms</span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Threat Level</span>
+          <span class="metric-value safe" id="threat-level">LOW</span>
+        </div>
+        <div class="sync-bar"><div class="sync-progress" id="sync-bar"></div></div>
+        <div class="attack-alert" id="attack-alert">
+          <strong>⚠️ Attack Detected:</strong> FDI on Agent #7. Resilient consensus protocol activated.
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-indicator">
+      <div class="mouse"></div>
+      <span>Scroll to explore</span>
+    </div>
+  </section>
+
+  <!-- ===================== RESEARCH / PIPELINE ===================== -->
+  <section id="research" class="pipeline-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Research Evolution</span>
+        <h2 class="section-title">The Digital Thread</h2>
+        <p class="section-subtitle">From theoretical foundations to real-world autonomous systems security</p>
+      </div>
+
+      <div class="timeline-container">
+        <div class="timeline-line"><div class="timeline-progress" id="timeline-progress"></div></div>
+
+        <!-- Phase 1 -->
+        <div class="timeline-item" data-phase="1">
+          <div class="timeline-content left">
+            <div class="phase-badge">Phase 01</div>
+            <h3>Frequency-Domain Foundations</h3>
+            <span class="institution">Ph.D. · Shanghai Jiao Tong University</span>
+            <span class="duration">2017 – 2022</span>
+            <p>Developed resilient consensus algorithms for delayed multi-agent systems using frequency-domain analysis. Established mathematical frameworks for H∞ and H₂ control under deception attacks.</p>
+            <div class="tech-stack">
+              <span class="tech-tag">Delay Systems</span>
+              <span class="tech-tag">H∞ Control</span>
+              <span class="tech-tag">Consensus Theory</span>
+            </div>
+            <div class="key-paper"><strong>Key output:</strong> Frequency-domain resilient consensus under IMP-based attacks — <em>Automatica</em> (2022)</div>
+          </div>
+          <div class="timeline-node"><div class="node-dot"></div><div class="node-pulse"></div></div>
+          <div class="timeline-visual right">
+            <div class="viz-container">
+              <canvas id="phase1-canvas" class="phase-canvas"></canvas>
+              <div class="viz-label">Frequency Response Analysis</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 2 -->
+        <div class="timeline-item" data-phase="2">
+          <div class="timeline-visual left">
+            <div class="viz-container">
+              <canvas id="phase2-canvas" class="phase-canvas"></canvas>
+              <div class="viz-label">Attack Detection Module</div>
+            </div>
+          </div>
+          <div class="timeline-node"><div class="node-dot"></div><div class="node-pulse"></div></div>
+          <div class="timeline-content right">
+            <div class="phase-badge">Phase 02</div>
+            <h3>Cyber-Attack Detection</h3>
+            <span class="institution">Postdoctoral Fellow · Shanghai Jiao Tong University</span>
+            <span class="duration">2022 – 2024</span>
+            <p>Developed Digital Twin-based attack detection for autonomous systems. Created state-estimation methods to identify False Data Injection (FDI) and replay attacks in real time.</p>
+            <div class="tech-stack">
+              <span class="tech-tag">Digital Twin</span>
+              <span class="tech-tag">FDI Detection</span>
+              <span class="tech-tag">State Estimation</span>
+            </div>
+            <div class="key-paper"><strong>Key output:</strong> Digital Twin-based attack detection for ASVs — <em>IEEE TVT</em> (2026)</div>
+          </div>
+        </div>
+
+        <!-- Phase 3 -->
+        <div class="timeline-item" data-phase="3">
+          <div class="timeline-content left">
+            <div class="phase-badge current">Phase 03</div>
+            <h3>Digital Twin Resilience</h3>
+            <span class="institution">Assistant Professor · Shanghai University of Electric Power</span>
+            <span class="duration">2025 – Present</span>
+            <p>Leading NSFC-funded research on Digital Twin cyber-attack detection and resilient consensus control for multi-agent systems including UAVs, ASVs, and smart grids.</p>
+            <div class="tech-stack">
+              <span class="tech-tag">UAV Swarms</span>
+              <span class="tech-tag">Smart Grid</span>
+              <span class="tech-tag">Resilient Control</span>
+            </div>
+            <div class="key-paper"><strong>Current:</strong> NSFC-RFIS Project (¥400K) · Digital Twin Resilient Consensus</div>
+          </div>
+          <div class="timeline-node"><div class="node-dot current"></div><div class="node-pulse current"></div></div>
+          <div class="timeline-visual right">
+            <div class="viz-container active">
+              <canvas id="phase3-canvas" class="phase-canvas"></canvas>
+              <div class="viz-label">Live Digital Twin Sync</div>
+              <div class="live-badge">ACTIVE</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Domains -->
+      <div class="research-areas">
+        <h3 class="subheading">Current Research Domains</h3>
+        <div class="domains-grid">
+          <div class="domain-card">
+            <div class="domain-icon">🚁</div>
+            <h4>UAV Swarms</h4>
+            <p>Resilient consensus control for unmanned aerial vehicles under cyber-attacks using graph-aware digital twins.</p>
+            <div class="domain-status">Active Research</div>
+          </div>
+          <div class="domain-card">
+            <div class="domain-icon">🚢</div>
+            <h4>Autonomous Surface Vehicles</h4>
+            <p>Digital Twin-based trajectory tracking and attack detection for marine autonomous systems.</p>
+            <div class="domain-status">Active Research</div>
+          </div>
+          <div class="domain-card">
+            <div class="domain-icon">⚡</div>
+            <h4>Smart Grids</h4>
+            <p>Cross-domain microgrid collaborative control and distributed energy optimisation with privacy protection.</p>
+            <div class="domain-status">NSFC Funded</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PUBLICATIONS ===================== -->
+  <section id="publications">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Scholarly Output</span>
+        <h2 class="section-title">Selected Publications</h2>
+        <p class="section-subtitle">Peer-reviewed journals and conference papers. See Google Scholar for the full list.</p>
+      </div>
+
+      <div class="pub-filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="journal">Journals</button>
+        <button class="filter-btn" data-filter="conference">Conferences</button>
+        <button class="filter-btn" data-filter="first">First / Corresponding Author</button>
+      </div>
+
+      <div class="pub-list">
+        <!-- 1 -->
+        <article class="pub-item" data-type="journal first">
+          <div class="pub-authors"><strong>Z. Ahmed</strong>, M. A. Saeed, A. Jenabzadeh, X. Xu, W. Zhang</div>
+          <div class="pub-title">Frequency-domain resilient consensus of multi-agent systems under IMP-based and non-IMP-based attacks</div>
+          <div class="pub-venue">Automatica, 2022</div>
+          <div class="pub-meta"><span class="pub-tag">Journal</span><span class="pub-highlight">First Author</span></div>
+        </article>
+        <!-- 2 -->
+        <article class="pub-item" data-type="journal first">
+          <div class="pub-authors"><strong>Z. Ahmed</strong>, R. Iqbal, T. Xie, L. Wang, H. Chen</div>
+          <div class="pub-title">Digital Twin based Attack Detection and Resilient Control of Autonomous Surface Vehicles</div>
+          <div class="pub-venue">IEEE Transactions on Vehicular Technology, 2026</div>
+          <div class="pub-meta"><span class="pub-tag">Journal</span><span class="pub-highlight">First Author</span><span>doi:10.1109/TVT.2026.3739966</span></div>
+        </article>
+        <!-- 3 -->
+        <article class="pub-item" data-type="journal first">
+          <div class="pub-authors"><strong>Z. Ahmed</strong>, Y. Lu, M. Nasir, R. Iqbal</div>
+          <div class="pub-title">Graph-Aware Digital Twin Resilient Consensus of UAV–ASV Systems Under Cyber-Attacks</div>
+          <div class="pub-venue">IEEE Transactions on Aerospace and Electronic Systems, 2026</div>
+          <div class="pub-meta"><span class="pub-tag">Journal</span><span class="pub-highlight">First Author</span><span>doi:10.1109/TAES.2026.3745720</span></div>
+        </article>
+        <!-- 4 -->
+        <article class="pub-item" data-type="journal first">
+          <div class="pub-authors"><strong>Z. Ahmed</strong>, Y. Lu, M. Nasir, R. Iqbal</div>
+          <div class="pub-title">Digital Twin-Based Resilient Consensus Control of Unmanned Aerial Vehicles under Attack</div>
+          <div class="pub-venue">IEEE Internet of Things Journal, 2026</div>
+          <div class="pub-meta"><span class="pub-tag">Journal</span><span class="pub-highlight">First Author</span><span>doi:10.1109/JIOT.2026.3718582</span></div>
+        </article>
+        <!-- 5 -->
+        <article class="pub-item" data-type="journal first">
+          <div class="pub-authors"><strong>Z. Ahmed</strong>, N. Ali, W. Zhang</div>
+          <div class="pub-title">H₂ Resilient consensus control of multiagent systems under deception attack</div>
+          <div class="pub-venue">IEEE Transactions on Circuits and Systems II: Express Briefs, 2023</div>
+          <div class="pub-meta"><span class="pub-tag">Journal</span><span class="pub-highlight">First Author</span></div>
+        </article>
+        <!-- 6 -->
+        <article class="pub-item" data-type="journal first">
+          <div class="pub-authors"><strong>Z. Ahmed</strong>, M. A. Saeed, A. Jenabzadeh, W. Zhang</div>
+          <div class="pub-title">Frequency domain analysis of resilient consensus in multi-agent systems subject to an integrity attack</div>
+          <div class="pub-venue">ISA Transactions, 2021</div>
+          <div class="pub-meta"><span class="pub-tag">Journal</span><span class="pub-highlight">First Author</span></div>
+        </article>
+        <!-- 7 -->
+        <article class="pub-item" data-type="journal first">
+          <div class="pub-authors"><strong>Z. Ahmed</strong>, M. A. Saeed, M. A. Khan, W. Zhang</div>
+          <div class="pub-title">Consensus control of multi-agent systems with input and communication delay: A frequency-domain perspective</div>
+          <div class="pub-venue">ISA Transactions, 2020</div>
+          <div class="pub-meta"><span class="pub-tag">Journal</span><span class="pub-highlight">First Author</span></div>
+        </article>
+        <!-- 8 -->
+        <article class="pub-item" data-type="journal first">
+          <div class="pub-authors"><strong>Z. Ahmed</strong></div>
+          <div class="pub-title">Frequency domain cascade consensus and disturbance rejection control of multi-agent systems</div>
+          <div class="pub-venue">Transactions of the Institute of Measurement and Control, 2023</div>
+          <div class="pub-meta"><span class="pub-tag">Journal</span><span class="pub-highlight">Sole Author</span></div>
+        </article>
+        <!-- 9 -->
+        <article class="pub-item" data-type="journal first">
+          <div class="pub-authors">M. Zafar, M. Nasir, <strong>Z. Ahmed</strong> (corresponding)</div>
+          <div class="pub-title">Group consensus H∞ control for homogeneous multi-agent systems with cyber-attacks and fixed topologies</div>
+          <div class="pub-venue">Journal of Vibration and Control, 2026</div>
+          <div class="pub-meta"><span class="pub-tag">Journal</span><span class="pub-highlight">Corresponding</span></div>
+        </article>
+        <!-- 10 -->
+        <article class="pub-item" data-type="journal first">
+          <div class="pub-authors">M. Nasir, Z. Ahmed (corresponding), N. Ali, M. A. Saeed</div>
+          <div class="pub-title">H∞ performance tracking and group consensus of delayed multiagent systems under attack</div>
+          <div class="pub-venue">Journal of Vibration and Control, 2023</div>
+          <div class="pub-meta"><span class="pub-tag">Journal</span><span class="pub-highlight">Corresponding</span></div>
+        </article>
+        <!-- 11 -->
+        <article class="pub-item" data-type="journal">
+          <div class="pub-authors">M. Nasir, A. Maiti, S. Xu, S. Garg, Z. Ahmed, H. Chen</div>
+          <div class="pub-title">Industrial IoT-Oriented Resilient Consensus in Multirobot Systems via State Space Time Series Driven Edge Situation Awareness</div>
+          <div class="pub-venue">IEEE Systems Journal, 2026</div>
+          <div class="pub-meta"><span class="pub-tag">Journal</span><span>doi:10.1109/JSYST.2026.3735748</span></div>
+        </article>
+        <!-- 12 -->
+        <article class="pub-item" data-type="journal">
+          <div class="pub-authors">Z. Ahmed, M. Nasir, D. M. Alsekait, M. Z. H. Shah, D. S. AbdElminaam, F. Ahmad</div>
+          <div class="pub-title">Control Conditions for Equal Power Sharing in Multi-Area Power Systems for Resilience Against False Data Injection Attacks</div>
+          <div class="pub-venue">Energies, 2024</div>
+          <div class="pub-meta"><span class="pub-tag">Journal</span></div>
+        </article>
+        <!-- 13 -->
+        <article class="pub-item" data-type="journal">
+          <div class="pub-authors">N. Ali, Z. Ahmed, H. Chen, W. Zhang</div>
+          <div class="pub-title">Event-Triggered Generalized State Observer-Based Finite-Time Fault-Tolerant Control of Underwater Vehicles with Input Saturation</div>
+          <div class="pub-venue">IEEE Transactions on Systems, Man, and Cybernetics: Systems, 2025</div>
+          <div class="pub-meta"><span class="pub-tag">Journal</span></div>
+        </article>
+        <!-- 14 -->
+        <article class="pub-item" data-type="conference">
+          <div class="pub-authors">M. Nasir, F. Gao, M. N. Khan, <strong>Z. Ahmed</strong> (presenter), K. Ali</div>
+          <div class="pub-title">Voltage and Power Regulation of DC Microgrids through Situation Awareness-based Distributed Resilient Control</div>
+          <div class="pub-venue">45th Chinese Control Conference (CCC 2026), Changsha, China</div>
+          <div class="pub-meta"><span class="pub-tag">Conference</span></div>
+        </article>
+        <!-- 15 -->
+        <article class="pub-item" data-type="conference">
+          <div class="pub-authors">Z. Zhao, L. Wang, <strong>Z. Ahmed</strong>, Y. Zhang</div>
+          <div class="pub-title">Distributed Sequential Balance Control for Modular Multilevel Converter-Based Battery Energy Storage System</div>
+          <div class="pub-venue">4th Conference on Fully Actuated System Theory and Applications (FASTA 2025), IEEE</div>
+          <div class="pub-meta"><span class="pub-tag">Conference</span></div>
+        </article>
+      </div>
+
+      <p style="text-align:center; margin-top:2rem; color:var(--text-secondary); font-size:0.9rem;">
+        Full publication list available on
+        <a href="https://scholar.google.com/citations?user=U7uM20cAAAAJ&hl=en" target="_blank" rel="noopener" style="color:var(--accent-cyan);">Google Scholar</a>
+        and
+        <a href="https://www.researchgate.net/profile/Zahoor-Ahmed-11" target="_blank" rel="noopener" style="color:var(--accent-cyan);">ResearchGate</a>.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===================== LAB / PROJECTS ===================== -->
+  <section id="lab" style="background: linear-gradient(to bottom, var(--primary-navy), var(--primary-navy-2));">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Funded Research</span>
+        <h2 class="section-title">Research Lab & Projects</h2>
+        <p class="section-subtitle">Active and recent grants supporting Digital Twin and resilient control research</p>
+      </div>
+
+      <div class="projects-grid">
+        <div class="project-card">
+          <div class="project-status active">Active · 2026–2027</div>
+          <h4>Digital Twin Cyber Attack Detection and Resilient Consensus Control of Multiagent Systems</h4>
+          <div class="project-funder">National Natural Science Foundation of China (NSFC-RFIS) · SUEP</div>
+          <div class="project-meta">Role: Principal Investigator</div>
+          <div class="project-amount">¥400,000</div>
+          <div class="project-number">Grant No. W2533162</div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-status active">Active · 2024–2026</div>
+          <h4>Cross-domain Microgrid Collaborative Control and Distributed Energy Efficiency Optimization Based on Privacy Protection Mechanism</h4>
+          <div class="project-funder">Ministry of Human Resources and Social Security — National Foreign Experts Individual Project (Category Y)</div>
+          <div class="project-meta">Role: Principal Investigator</div>
+          <div class="project-amount">¥200,000</div>
+          <div class="project-number">Grant No. Y20240258</div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-status active">Active · 2026–</div>
+          <h4>Lighting Up the Green Silk Road: The Integration, Challenges, and Innovation of China's New Power Systems in 'Belt and Road' Countries</h4>
+          <div class="project-funder">Degree and Graduate Education Development Center, Ministry of Education</div>
+          <div class="project-meta">Role: Major Participant</div>
+          <div class="project-number">Project No. ZT-2510256002</div>
+        </div>
+      </div>
+
+      <div class="two-col" style="margin-top:3rem;">
+        <div class="info-card">
+          <h3><span class="icon">🎓</span> Supervision</h3>
+          <ul class="info-list">
+            <li><strong>PhD Students</strong> Digital Twin security, multi-agent systems, resilient control</li>
+            <li><strong>Master Students</strong> Machine learning, autonomous systems, cyber-physical security</li>
+            <li><strong>Openings</strong> Motivated PhD/MSc candidates are welcome — see <a href="#contact" style="color:var(--accent-cyan);">contact</a></li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <h3><span class="icon">🏆</span> Selected Awards</h3>
+          <ul class="info-list">
+            <li><strong>2023</strong> 2nd National Postdoctoral Innovation & Entrepreneurship Competition — Excellence Award (Yantai)</li>
+            <li><strong>2022</strong> SJTU Excellent International Graduate Student Award</li>
+            <li><strong>2021</strong> CSC Outstanding International Student Award</li>
+            <li><strong>2021</strong> HEC Pakistan PhD PSP Award for Overseas Students</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TEACHING ===================== -->
+  <section id="teaching">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Education</span>
+        <h2 class="section-title">Teaching & Mentoring</h2>
+        <p class="section-subtitle">Courses taught and academic service</p>
+      </div>
+
+      <div class="two-col">
+        <div class="info-card">
+          <h3><span class="icon">📚</span> Courses</h3>
+          <ul class="info-list">
+            <li><strong>Machine Learning</strong> Faculty of Artificial Intelligence, SUEP (2025–present)</li>
+            <li><strong>Automation and Smart Manufacturing</strong> Faculty of Artificial Intelligence, SUEP (2025–present)</li>
+            <li><strong>Signals and Systems</strong> Government College University Lahore (2009–2017)</li>
+            <li><strong>Control Theory</strong> Government College University Lahore (2009–2017)</li>
+            <li><strong>Machine Learning</strong> Government College University Lahore (2009–2017)</li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <h3><span class="icon">🌐</span> Academic Service</h3>
+          <ul class="info-list">
+            <li><strong>Guest Editor</strong> Sustainability — "Digital Twins and Cyber-Physical Systems for a Sustainable Energy Transition" (2025–2026)</li>
+            <li><strong>Reviewer</strong> Automatica, IEEE TAC, IEEE TVT, IEEE TIE, IEEE TIM, IEEE IoT-J, ISA Transactions, Control Engineering Practice, and more</li>
+            <li><strong>Organizing Committee</strong> 5th Intl. Conf. on Advanced Sensing and Intelligent Manufacturing (ASIM 2026), Chongqing</li>
+            <li><strong>Session Chair</strong> ASIM 2026 — Workshop on Data-Driven Control and Intelligent Fault Diagnosis</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="two-col" style="margin-top:1.5rem;">
+        <div class="info-card">
+          <h3><span class="icon">🎤</span> Invited Talks (Recent)</h3>
+          <ul class="info-list">
+            <li><strong>2026</strong> "Digital Twin Resilient Control of Smart Grid Systems" — SUEP, Shanghai</li>
+            <li><strong>2025</strong> "Digital Twin: An Emerging Technology of AI and ML from Consensus Control Perspective" — ICETP, IUB Bahawalpur</li>
+            <li><strong>2025</strong> Workshop on Digital Twin for Autonomous Vehicles — USST, Shanghai</li>
+            <li><strong>2024</strong> Workshop on Digital Twin & AI/ML — USST, Shanghai</li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <h3><span class="icon">🎓</span> Education</h3>
+          <ul class="info-list">
+            <li><strong>Postdoc · 2022–2024</strong> Control Science & Engineering, Shanghai Jiao Tong University</li>
+            <li><strong>PhD · 2017–2022</strong> Control Science & Engineering, Shanghai Jiao Tong University (Supervisor: Prof. Weidong Zhang)</li>
+            <li><strong>MS · 2010–2013</strong> Electrical Engineering (Control), Government College University Lahore</li>
+            <li><strong>BSc · 2003–2007</strong> Electronics Engineering, The Islamia University Bahawalpur</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CONTACT ===================== -->
+  <section id="contact" style="background: linear-gradient(to bottom, var(--primary-navy-2), var(--primary-navy));">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Get in Touch</span>
+        <h2 class="section-title">Contact & Collaboration</h2>
+        <p class="section-subtitle">Open to research collaborations, invited talks, and student supervision inquiries</p>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-item">
+          <div class="icon">✉️</div>
+          <div class="label">Email</div>
+          <a href="mailto:zahoorgcu10@shiep.edu.cn">zahoorgcu10@shiep.edu.cn</a>
+        </div>
+        <div class="contact-item">
+          <div class="icon">📞</div>
+          <div class="label">Phone</div>
+          <a href="tel:+8618621106101">+86 186 2110 6101</a>
+        </div>
+        <div class="contact-item">
+          <div class="icon">📍</div>
+          <div class="label">Address</div>
+          <a href="https://maps.google.com/?q=Shanghai+University+of+Electric+Power" target="_blank" rel="noopener" style="font-size:0.85rem;">No. 2588 Changyang Rd, Yangpu District, Shanghai 200090, PRC</a>
+        </div>
+        <div class="contact-item">
+          <div class="icon">🔗</div>
+          <div class="label">Profiles</div>
+          <a href="https://scholar.google.com/citations?user=U7uM20cAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a>
+          <a href="https://www.researchgate.net/profile/Zahoor-Ahmed-11" target="_blank" rel="noopener" style="display:block; margin-top:0.25rem;">ResearchGate</a>
+        </div>
+      </div>
+
+      <div class="recruiting-banner">
+        <h3>🚀 Recruiting PhD & MSc Students</h3>
+        <p>We are looking for motivated students interested in Digital Twin security, resilient consensus control, and autonomous systems (UAVs, ASVs, smart grids). If you are passionate about cyber-physical systems security, please reach out with your CV and research interests.</p>
+        <a href="mailto:zahoorgcu10@shiep.edu.cn?subject=PhD%2FMSc%20Application%20-%20Digital%20Twin%20Security" class="btn btn-primary">Apply / Inquire</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer>
+    <p>© <span id="year"></span> Dr. Zahoor Ahmed · Shanghai University of Electric Power</p>
+    <p style="margin-top:0.5rem;">
+      <a href="https://scholar.google.com/citations?user=U7uM20cAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a> ·
+      <a href="https://www.researchgate.net/profile/Zahoor-Ahmed-11" target="_blank" rel="noopener">ResearchGate</a> ·
+      <a href="https://fai.shiep.edu.cn/1b/2f/c6542a269103/page.htm" target="_blank" rel="noopener">SUEP Profile</a>
+    </p>
+  </footer>
+
+  <!-- ===================== SCRIPTS ===================== -->
+  <script>
+    /* ============================================================
+       1. NAVIGATION (scroll style + mobile toggle)
+    ============================================================ */
+    const navbar = document.getElementById('navbar');
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 20);
+    }, { passive: true });
+
+    navToggle.addEventListener('click', () => {
+      const open = navLinks.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded', open);
+      navToggle.textContent = open ? '✕' : '☰';
     });
 
-    // Timeline progress bar
-    function updateTimelineProgress() {
-        const timeline = document.querySelector('.timeline-container');
-        const progress = document.getElementById('timeline-progress');
-        const rect = timeline.getBoundingClientRect();
-        const windowHeight = window.innerHeight;
-        
-        if (rect.top < windowHeight && rect.bottom > 0) {
-            const visible = Math.min(Math.max(windowHeight - rect.top, 0), rect.height);
-            const percent = (visible / rect.height) * 100;
-            progress.style.height = percent + '%';
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+        navToggle.textContent = '☰';
+      });
+    });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    /* ============================================================
+       2. HERO — Digital Twin particle system
+    ============================================================ */
+    (function heroCanvas() {
+      const canvas = document.getElementById('digital-twin-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width, height, particles = [];
+      const mouse = { x: null, y: null, radius: 150 };
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let rafId = null;
+
+      function resize() {
+        width = canvas.width = canvas.offsetWidth || window.innerWidth;
+        height = canvas.height = canvas.offsetHeight || window.innerHeight;
+        initParticles();
+      }
+
+      class Agent {
+        constructor() {
+          this.x = Math.random() * width;
+          this.y = Math.random() * height;
+          this.size = Math.random() * 3 + 2;
+          this.baseX = this.x;
+          this.baseY = this.y;
+          this.density = Math.random() * 30 + 1;
+          this.color = '#00D4AA';
+          this.twinOffset = { x: (Math.random() - 0.5) * 50, y: (Math.random() - 0.5) * 50 };
+          this.isAttacked = false;
+          this.attackTimer = Math.random() * 500 + 500;
         }
-    }
 
-    window.addEventListener('scroll', updateTimelineProgress);
+        draw() {
+          if (!this.isAttacked) {
+            ctx.strokeStyle = 'rgba(0, 212, 170, 0.2)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(this.x, this.y);
+            ctx.lineTo(this.x + this.twinOffset.x, this.y + this.twinOffset.y);
+            ctx.stroke();
 
-    // Phase 1: Frequency Domain Visualization (Sine waves)
-    const canvas1 = document.getElementById('phase1-canvas');
-    if (canvas1) {
-        const ctx1 = canvas1.getContext('2d');
-        canvas1.width = canvas1.offsetWidth;
-        canvas1.height = canvas1.offsetHeight;
-        let time1 = 0;
+            ctx.fillStyle = 'rgba(100, 255, 218, 0.3)';
+            ctx.beginPath();
+            ctx.arc(this.x + this.twinOffset.x, this.y + this.twinOffset.y, this.size * 0.8, 0, Math.PI * 2);
+            ctx.fill();
 
-        function animatePhase1() {
-            ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
-            ctx1.strokeStyle = 'rgba(0, 212, 170, 0.8)';
-            ctx1.lineWidth = 2;
-            ctx1.beginPath();
-            
-            for (let x = 0; x < canvas1.width; x++) {
-                const y = canvas1.height / 2 + Math.sin(x * 0.05 + time1) * 30 * Math.sin(time1 * 0.5);
-                x === 0 ? ctx1.moveTo(x, y) : ctx1.lineTo(x, y);
-            }
-            ctx1.stroke();
-            
-            // Draw second wave (attack signal)
-            ctx1.strokeStyle = 'rgba(255, 107, 53, 0.6)';
-            ctx1.beginPath();
-            for (let x = 0; x < canvas1.width; x++) {
-                const y = canvas1.height / 2 + Math.sin(x * 0.05 + time1 + 2) * 20;
-                x === 0 ? ctx1.moveTo(x, y) : ctx1.lineTo(x, y);
-            }
-            ctx1.stroke();
-            
-            time1 += 0.05;
-            requestAnimationFrame(animatePhase1);
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+          } else {
+            ctx.fillStyle = '#FF6B35';
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size * 1.2, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.strokeStyle = 'rgba(255, 107, 53, 0.5)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size * 3, 0, Math.PI * 2);
+            ctx.stroke();
+          }
         }
-        animatePhase1();
-    }
 
-    // Phase 2: Attack Detection Visualization (Grid with scanning)
-    const canvas2 = document.getElementById('phase2-canvas');
-    if (canvas2) {
-        const ctx2 = canvas2.getContext('2d');
-        canvas2.width = canvas2.offsetWidth;
-        canvas2.height = canvas2.offsetHeight;
+        update() {
+          this.attackTimer--;
+          if (this.attackTimer <= 0) {
+            this.isAttacked = !this.isAttacked;
+            this.attackTimer = this.isAttacked ? 200 : Math.random() * 1000 + 500;
+            updateStatusCard(this.isAttacked);
+          }
+
+          if (this.isAttacked) {
+            this.x += (Math.random() - 0.5) * 4;
+            this.y += (Math.random() - 0.5) * 4;
+          } else {
+            this.x += (Math.random() - 0.5) * 0.5;
+            this.y += (Math.random() - 0.5) * 0.5;
+          }
+
+          if (mouse.x !== null) {
+            const dx = mouse.x - this.x;
+            const dy = mouse.y - this.y;
+            const dist = Math.hypot(dx, dy);
+            if (dist < mouse.radius && dist > 0) {
+              const force = (mouse.radius - dist) / mouse.radius;
+              this.x -= (dx / dist) * force * this.density;
+              this.y -= (dy / dist) * force * this.density;
+            } else {
+              this.x -= (this.x - this.baseX) / 10;
+              this.y -= (this.y - this.baseY) / 10;
+            }
+          } else {
+            this.x -= (this.x - this.baseX) / 30;
+            this.y -= (this.y - this.baseY) / 30;
+          }
+
+          if (this.x < 0 || this.x > width) this.baseX = Math.random() * width;
+          if (this.y < 0 || this.y > height) this.baseY = Math.random() * height;
+        }
+      }
+
+      function initParticles() {
+        particles = [];
+        const count = Math.min(50, Math.floor((width * height) / 18000));
+        for (let i = 0; i < count; i++) particles.push(new Agent());
+      }
+
+      function connect() {
+        for (let a = 0; a < particles.length; a++) {
+          for (let b = a + 1; b < particles.length; b++) {
+            const dx = particles[a].x - particles[b].x;
+            const dy = particles[a].y - particles[b].y;
+            const dist2 = dx * dx + dy * dy;
+            const maxDist = width / 7;
+            if (dist2 < maxDist * maxDist) {
+              const opacity = 1 - dist2 / (maxDist * maxDist);
+              if (particles[a].isAttacked || particles[b].isAttacked) {
+                ctx.strokeStyle = `rgba(255, 107, 53, ${opacity * 0.5})`;
+              } else {
+                ctx.strokeStyle = `rgba(0, 212, 170, ${opacity * 0.3})`;
+              }
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.moveTo(particles[a].x, particles[a].y);
+              ctx.lineTo(particles[b].x, particles[b].y);
+              ctx.stroke();
+            }
+          }
+        }
+      }
+
+      function drawGrid() {
+        ctx.strokeStyle = 'rgba(100, 255, 218, 0.05)';
+        ctx.lineWidth = 1;
+        const g = 50;
+        for (let x = 0; x <= width; x += g) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke();
+        }
+        for (let y = 0; y <= height; y += g) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke();
+        }
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, width, height);
+        drawGrid();
+        for (const p of particles) { p.update(); p.draw(); }
+        connect();
+        rafId = requestAnimationFrame(animate);
+      }
+
+      function updateStatusCard(attacked) {
+        const threatLevel = document.getElementById('threat-level');
+        const syncAcc = document.getElementById('sync-acc');
+        const alertEl = document.getElementById('attack-alert');
+        const agentCount = document.getElementById('agent-count');
+        if (!threatLevel) return;
+
+        if (attacked) {
+          threatLevel.textContent = 'HIGH';
+          threatLevel.className = 'metric-value warning';
+          syncAcc.textContent = '67.2%';
+          syncAcc.className = 'metric-value warning';
+          alertEl.classList.add('active');
+          agentCount.textContent = '11/12';
+        } else {
+          threatLevel.textContent = 'LOW';
+          threatLevel.className = 'metric-value safe';
+          syncAcc.textContent = '98.4%';
+          syncAcc.className = 'metric-value safe';
+          alertEl.classList.remove('active');
+          agentCount.textContent = '12/12';
+        }
+      }
+
+      // Resize handling (debounced)
+      let resizeTimer;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(resize, 150);
+      });
+
+      // Pause when tab hidden (saves battery)
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          if (rafId) cancelAnimationFrame(rafId);
+          rafId = null;
+        } else if (!rafId && !prefersReduced) {
+          animate();
+        }
+      });
+
+      // Mouse
+      window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+      window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
+
+      // Init
+      if (canvas.offsetWidth > 0) resize();
+      else { requestAnimationFrame(() => { resize(); }); }
+      if (!prefersReduced) animate();
+      else { // static render for reduced motion
+        drawGrid();
+        for (const p of particles) p.draw();
+        connect();
+      }
+
+      // Metrics fluctuation
+      setInterval(() => {
+        const latency = document.getElementById('latency');
+        const bar = document.getElementById('sync-bar');
+        const alertEl = document.getElementById('attack-alert');
+        if (!latency || !bar || !alertEl) return;
+        if (!alertEl.classList.contains('active')) {
+          latency.textContent = (10 + Math.random() * 5).toFixed(0) + 'ms';
+          bar.style.width = (95 + Math.random() * 4) + '%';
+        }
+      }, 2000);
+    })();
+
+    /* ============================================================
+       3. PIPELINE — Intersection Observer + timeline progress
+    ============================================================ */
+    (function pipeline() {
+      const items = document.querySelectorAll('.timeline-item');
+      const progress = document.getElementById('timeline-progress');
+      const container = document.querySelector('.timeline-container');
+      if (!items.length) return;
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+      }, { threshold: 0.2, rootMargin: '0px 0px -80px 0px' });
+
+      items.forEach(item => observer.observe(item));
+
+      function updateProgress() {
+        if (!container || !progress) return;
+        const rect = container.getBoundingClientRect();
+        const vh = window.innerHeight;
+        if (rect.top < vh && rect.bottom > 0) {
+          const visible = Math.min(Math.max(vh - rect.top, 0), rect.height);
+          progress.style.height = (visible / rect.height) * 100 + '%';
+        }
+      }
+      window.addEventListener('scroll', updateProgress, { passive: true });
+      updateProgress();
+    })();
+
+    /* ============================================================
+       4. PHASE CANVAS ANIMATIONS (resize-aware, pause when off-screen)
+    ============================================================ */
+    (function phaseCanvases() {
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function setupCanvas(id) {
+        const c = document.getElementById(id);
+        if (!c) return null;
+        const ctx = c.getContext('2d');
+        return { c, ctx, animId: null, running: false };
+      }
+
+      function resizeCanvas(obj) {
+        const rect = obj.c.getBoundingClientRect();
+        obj.c.width = Math.max(1, Math.floor(rect.width));
+        obj.c.height = Math.max(1, Math.floor(rect.height));
+      }
+
+      /* ---------- Phase 1: sine waves ---------- */
+      const p1 = setupCanvas('phase1-canvas');
+      if (p1) {
+        let t = 0;
+        function draw1() {
+          if (!p1.running) return;
+          p1.ctx.clearRect(0, 0, p1.c.width, p1.c.height);
+          p1.ctx.strokeStyle = 'rgba(0, 212, 170, 0.8)';
+          p1.ctx.lineWidth = 2;
+          p1.ctx.beginPath();
+          for (let x = 0; x < p1.c.width; x++) {
+            const y = p1.c.height / 2 + Math.sin(x * 0.05 + t) * 30 * Math.sin(t * 0.5);
+            x === 0 ? p1.ctx.moveTo(x, y) : p1.ctx.lineTo(x, y);
+          }
+          p1.ctx.stroke();
+          p1.ctx.strokeStyle = 'rgba(255, 107, 53, 0.6)';
+          p1.ctx.beginPath();
+          for (let x = 0; x < p1.c.width; x++) {
+            const y = p1.c.height / 2 + Math.sin(x * 0.05 + t + 2) * 20;
+            x === 0 ? p1.ctx.moveTo(x, y) : p1.ctx.lineTo(x, y);
+          }
+          p1.ctx.stroke();
+          t += 0.05;
+          p1.animId = requestAnimationFrame(draw1);
+        }
+        p1.running = true;
+        resizeCanvas(p1);
+        if (!prefersReduced) draw1();
+        else { resizeCanvas(p1); /* draw one static frame */ }
+      }
+
+      /* ---------- Phase 2: scanning grid ---------- */
+      const p2 = setupCanvas('phase2-canvas');
+      if (p2) {
         let scanX = 0;
         const threats = [
-            {x: 100, y: 80, detected: false},
-            {x: 200, y: 150, detected: false},
-            {x: 150, y: 120, detected: false}
+          { x: 0.3, y: 0.35, detected: false },
+          { x: 0.6, y: 0.6, detected: false },
+          { x: 0.45, y: 0.5, detected: false }
         ];
-
-        function animatePhase2() {
-            ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
-            
-            // Draw grid
-            ctx2.strokeStyle = 'rgba(100, 255, 218, 0.1)';
-            for (let x = 0; x < canvas2.width; x += 20) {
-                ctx2.beginPath(); ctx2.moveTo(x, 0); ctx2.lineTo(x, canvas2.height); ctx2.stroke();
-            }
-            for (let y = 0; y < canvas2.height; y += 20) {
-                ctx2.beginPath(); ctx2.moveTo(0, y); ctx2.lineTo(canvas2.width, y); ctx2.stroke();
-            }
-            
-            // Scanning line
-            ctx2.strokeStyle = 'rgba(0, 212, 170, 0.8)';
-            ctx2.lineWidth = 2;
-            ctx2.beginPath();
-            ctx2.moveTo(scanX, 0);
-            ctx2.lineTo(scanX, canvas2.height);
-            ctx2.stroke();
-            
-            // Check threats
-            threats.forEach(t => {
-                if (Math.abs(t.x - scanX) < 10) t.detected = true;
-                
-                if (t.detected) {
-                    // Red alert for detected threat
-                    ctx2.fillStyle = 'rgba(255, 107, 53, 0.8)';
-                    ctx2.beginPath();
-                    ctx2.arc(t.x, t.y, 5, 0, Math.PI * 2);
-                    ctx2.fill();
-                    
-                    // Detection ring
-                    ctx2.strokeStyle = 'rgba(255, 107, 53, 0.5)';
-                    ctx2.beginPath();
-                    ctx2.arc(t.x, t.y, 15 + Math.sin(Date.now() * 0.01) * 5, 0, Math.PI * 2);
-                    ctx2.stroke();
-                } else {
-                    // Hidden threat
-                    ctx2.fillStyle = 'rgba(255, 107, 53, 0.3)';
-                    ctx2.beginPath();
-                    ctx2.arc(t.x, t.y, 3, 0, Math.PI * 2);
-                    ctx2.fill();
-                }
-            });
-            
-            scanX += 2;
-            if (scanX > canvas2.width) {
-                scanX = 0;
-                threats.forEach(t => t.detected = false);
-            }
-            
-            requestAnimationFrame(animatePhase2);
-        }
-        animatePhase2();
-    }
-
-    // Phase 3: Live Digital Twin Sync (Particles syncing)
-    const canvas3 = document.getElementById('phase3-canvas');
-    if (canvas3) {
-        const ctx3 = canvas3.getContext('2d');
-        canvas3.width = canvas3.offsetWidth;
-        canvas3.height = canvas3.offsetHeight;
-        
-        const agents = [];
-        for (let i = 0; i < 8; i++) {
-            agents.push({
-                x: Math.random() * canvas3.width,
-                y: Math.random() * canvas3.height,
-                tx: Math.random() * canvas3.width, // target x (digital twin)
-                ty: Math.random() * canvas3.height,
-                sync: Math.random()
-            });
-        }
-
-        function animatePhase3() {
-            ctx3.clearRect(0, 0, canvas3.width, canvas3.height);
-            
-            agents.forEach(a => {
-                // Update target (digital twin moves)
-                if (Math.random() < 0.02) {
-                    a.tx = Math.random() * canvas3.width;
-                    a.ty = Math.random() * canvas3.height;
-                }
-                
-                // Physical agent moves toward twin (sync)
-                const dx = a.tx - a.x;
-                const dy = a.ty - a.y;
-                a.x += dx * 0.05;
-                a.y += dy * 0.05;
-                a.sync = 1 - Math.sqrt(dx*dx + dy*dy) / 200;
-                
-                // Draw connection
-                ctx3.strokeStyle = `rgba(0, 212, 170, ${a.sync * 0.5})`;
-                ctx3.lineWidth = 1;
-                ctx3.beginPath();
-                ctx3.moveTo(a.x, a.y);
-                ctx3.lineTo(a.tx, a.ty);
-                ctx3.stroke();
-                
-                // Draw physical
-                ctx3.fillStyle = '#00D4AA';
-                ctx3.beginPath();
-                ctx3.arc(a.x, a.y, 4, 0, Math.PI * 2);
-                ctx3.fill();
-                
-                // Draw twin
-                ctx3.fillStyle = 'rgba(100, 255, 218, 0.4)';
-                ctx3.beginPath();
-                ctx3.arc(a.tx, a.ty, 3, 0, Math.PI * 2);
-                ctx3.fill();
-            });
-            
-            requestAnimationFrame(animatePhase3);
-        }
-        animatePhase3();
-    }
-});
-</script>
-    </section>
-
-    <script>
-        // Digital Twin Visualization - Particle System representing agents and their digital twins
-        const canvas = document.getElementById('digital-twin-canvas');
-        const ctx = canvas.getContext('2d');
-        
-        let width, height;
-        let particles = [];
-        let connections = [];
-        let mouse = { x: null, y: null, radius: 150 };
-        
-        // Resize canvas
-        function resize() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-            initParticles();
-        }
-        
-        // Particle class representing Physical Agent and Digital Twin pair
-        class Agent {
-            constructor() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.size = Math.random() * 3 + 2;
-                this.baseX = this.x;
-                this.baseY = this.y;
-                this.density = (Math.random() * 30) + 1;
-                this.color = '#00D4AA';
-                this.twinOffset = { x: (Math.random() - 0.5) * 50, y: (Math.random() - 0.5) * 50 };
-                this.isAttacked = false;
-                this.attackTimer = Math.random() * 500 + 500;
-            }
-            
-            draw() {
-                // Draw connection line between physical and digital twin (represents data flow)
-                if (!this.isAttacked) {
-                    ctx.strokeStyle = 'rgba(0, 212, 170, 0.2)';
-                    ctx.lineWidth = 1;
-                    ctx.beginPath();
-                    ctx.moveTo(this.x, this.y);
-                    ctx.lineTo(this.x + this.twinOffset.x, this.y + this.twinOffset.y);
-                    ctx.stroke();
-                    
-                    // Draw Digital Twin (ghost/transparent)
-                    ctx.fillStyle = 'rgba(100, 255, 218, 0.3)';
-                    ctx.beginPath();
-                    ctx.arc(this.x + this.twinOffset.x, this.y + this.twinOffset.y, this.size * 0.8, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    // Draw Physical Agent (solid)
-                    ctx.fillStyle = this.color;
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    // Glow effect
-                    ctx.shadowBlur = 15;
-                    ctx.shadowColor = this.color;
-                } else {
-                    // Attacked state - red and erratic
-                    ctx.fillStyle = '#FF6B35';
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size * 1.2, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    // Draw attack radius
-                    ctx.strokeStyle = 'rgba(255, 107, 53, 0.5)';
-                    ctx.lineWidth = 2;
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size * 3, 0, Math.PI * 2);
-                    ctx.stroke();
-                }
-                ctx.shadowBlur = 0;
-            }
-            
-            update() {
-                // Check for attack simulation
-                this.attackTimer--;
-                if (this.attackTimer <= 0) {
-                    this.isAttacked = !this.isAttacked;
-                    this.attackTimer = this.isAttacked ? 200 : Math.random() * 1000 + 500;
-                    updateStatusCard(this.isAttacked);
-                }
-                
-                if (this.isAttacked) {
-                    // Erratic movement when attacked
-                    this.x += (Math.random() - 0.5) * 4;
-                    this.y += (Math.random() - 0.5) * 4;
-                } else {
-                    // Normal movement - slight drift
-                    this.x += (Math.random() - 0.5) * 0.5;
-                    this.y += (Math.random() - 0.5) * 0.5;
-                }
-                
-                // Mouse interaction
-                let dx = mouse.x - this.x;
-                let dy = mouse.y - this.y;
-                let distance = Math.sqrt(dx * dx + dy * dy);
-                
-                if (distance < mouse.radius) {
-                    const forceDirectionX = dx / distance;
-                    const forceDirectionY = dy / distance;
-                    const maxDistance = mouse.radius;
-                    const force = (maxDistance - distance) / maxDistance;
-                    const directionX = forceDirectionX * force * this.density;
-                    const directionY = forceDirectionY * force * this.density;
-                    
-                    this.x -= directionX;
-                    this.y -= directionY;
-                } else {
-                    // Return to base
-                    if (this.x !== this.baseX) {
-                        let dx = this.x - this.baseX;
-                        this.x -= dx / 10;
-                    }
-                    if (this.y !== this.baseY) {
-                        let dy = this.y - this.baseY;
-                        this.y -= dy / 10;
-                    }
-                }
-                
-                // Keep in bounds
-                if (this.x < 0 || this.x > width) this.baseX = Math.random() * width;
-                if (this.y < 0 || this.y > height) this.baseY = Math.random() * height;
-            }
-        }
-        
-        function initParticles() {
-            particles = [];
-            const numberOfParticles = Math.min(50, (width * height) / 15000);
-            for (let i = 0; i < numberOfParticles; i++) {
-                particles.push(new Agent());
-            }
-        }
-        
-        function connect() {
-            let opacityValue = 1;
-            for (let a = 0; a < particles.length; a++) {
-                for (let b = a; b < particles.length; b++) {
-                    let distance = ((particles[a].x - particles[b].x) * (particles[a].x - particles[b].x))
-                        + ((particles[a].y - particles[b].y) * (particles[a].y - particles[b].y));
-                    
-                    if (distance < (width/7) * (width/7)) {
-                        opacityValue = 1 - (distance/20000);
-                        // If either is attacked, show red connection (compromised network)
-                        if (particles[a].isAttacked || particles[b].isAttacked) {
-                            ctx.strokeStyle = `rgba(255, 107, 53, ${opacityValue * 0.5})`;
-                        } else {
-                            ctx.strokeStyle = `rgba(0, 212, 170, ${opacityValue * 0.3})`;
-                        }
-                        ctx.lineWidth = 1;
-                        ctx.beginPath();
-                        ctx.moveTo(particles[a].x, particles[a].y);
-                        ctx.lineTo(particles[b].x, particles[b].y);
-                        ctx.stroke();
-                    }
-                }
-            }
-        }
-        
-        function updateStatusCard(attacked) {
-            const threatLevel = document.getElementById('threat-level');
-            const syncAcc = document.getElementById('sync-acc');
-            const attackAlert = document.getElementById('attack-alert');
-            const agentCount = document.getElementById('agent-count');
-            
-            if (attacked) {
-                threatLevel.textContent = 'HIGH';
-                threatLevel.className = 'metric-value warning';
-                syncAcc.textContent = '67.2%';
-                attackAlert.classList.add('active');
-                agentCount.textContent = '11/12';
+        function draw2() {
+          if (!p2.running) return;
+          const w = p2.c.width, h = p2.c.height;
+          p2.ctx.clearRect(0, 0, w, h);
+          p2.ctx.strokeStyle = 'rgba(100, 255, 218, 0.1)';
+          for (let x = 0; x < w; x += 20) {
+            p2.ctx.beginPath(); p2.ctx.moveTo(x, 0); p2.ctx.lineTo(x, h); p2.ctx.stroke();
+          }
+          for (let y = 0; y < h; y += 20) {
+            p2.ctx.beginPath(); p2.ctx.moveTo(0, y); p2.ctx.lineTo(w, y); p2.ctx.stroke();
+          }
+          p2.ctx.strokeStyle = 'rgba(0, 212, 170, 0.8)';
+          p2.ctx.lineWidth = 2;
+          p2.ctx.beginPath(); p2.ctx.moveTo(scanX, 0); p2.ctx.lineTo(scanX, h); p2.ctx.stroke();
+          threats.forEach(th => {
+            const tx = th.x * w, ty = th.y * h;
+            if (Math.abs(tx - scanX) < 10) th.detected = true;
+            if (th.detected) {
+              p2.ctx.fillStyle = 'rgba(255, 107, 53, 0.8)';
+              p2.ctx.beginPath(); p2.ctx.arc(tx, ty, 5, 0, Math.PI * 2); p2.ctx.fill();
+              p2.ctx.strokeStyle = 'rgba(255, 107, 53, 0.5)';
+              p2.ctx.beginPath();
+              p2.ctx.arc(tx, ty, 15 + Math.sin(Date.now() * 0.01) * 5, 0, Math.PI * 2);
+              p2.ctx.stroke();
             } else {
-                threatLevel.textContent = 'LOW';
-                threatLevel.className = 'metric-value safe';
-                syncAcc.textContent = '98.4%';
-                attackAlert.classList.remove('active');
-                agentCount.textContent = '12/12';
+              p2.ctx.fillStyle = 'rgba(255, 107, 53, 0.3)';
+              p2.ctx.beginPath(); p2.ctx.arc(tx, ty, 3, 0, Math.PI * 2); p2.ctx.fill();
             }
+          });
+          scanX += 2;
+          if (scanX > w) { scanX = 0; threats.forEach(t => t.detected = false); }
+          p2.animId = requestAnimationFrame(draw2);
         }
-        
-        // Animation loop
-        function animate() {
-            ctx.clearRect(0, 0, width, height);
-            
-            // Draw grid background
-            ctx.strokeStyle = 'rgba(100, 255, 218, 0.05)';
-            ctx.lineWidth = 1;
-            const gridSize = 50;
-            for (let x = 0; x <= width; x += gridSize) {
-                ctx.beginPath();
-                ctx.moveTo(x, 0);
-                ctx.lineTo(x, height);
-                ctx.stroke();
-            }
-            for (let y = 0; y <= height; y += gridSize) {
-                ctx.beginPath();
-                ctx.moveTo(0, y);
-                ctx.lineTo(width, y);
-                ctx.stroke();
-            }
-            
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-                particles[i].draw();
-            }
-            connect();
-            requestAnimationFrame(animate);
+        p2.running = true;
+        resizeCanvas(p2);
+        if (!prefersReduced) draw2();
+      }
+
+      /* ---------- Phase 3: live sync ---------- */
+      const p3 = setupCanvas('phase3-canvas');
+      if (p3) {
+        let agents = [];
+        function init3() {
+          agents = [];
+          for (let i = 0; i < 8; i++) {
+            agents.push({
+              x: Math.random() * p3.c.width,
+              y: Math.random() * p3.c.height,
+              tx: Math.random() * p3.c.width,
+              ty: Math.random() * p3.c.height
+            });
+          }
         }
-        
-        // Mouse interaction
-        window.addEventListener('mousemove', function(event) {
-            mouse.x = event.x;
-            mouse.y = event.y;
-        });
-        
-        window.addEventListener('mouseout', function() {
-            mouse.x = undefined;
-            mouse.y = undefined;
-        });
-        
-        window.addEventListener('resize', resize);
-        resize();
-        animate();
-        
-        // Simulate real-time metrics fluctuation
-        setInterval(() => {
-            const latency = document.getElementById('latency');
-            const syncBar = document.getElementById('sync-bar');
-            if (!document.getElementById('attack-alert').classList.contains('active')) {
-                latency.textContent = (10 + Math.random() * 5).toFixed(0) + 'ms';
-                syncBar.style.width = (95 + Math.random() * 4) + '%';
+        function draw3() {
+          if (!p3.running) return;
+          p3.ctx.clearRect(0, 0, p3.c.width, p3.c.height);
+          agents.forEach(a => {
+            if (Math.random() < 0.02) {
+              a.tx = Math.random() * p3.c.width;
+              a.ty = Math.random() * p3.c.height;
             }
-        }, 2000);
-    </script>
+            const dx = a.tx - a.x, dy = a.ty - a.y;
+            a.x += dx * 0.05; a.y += dy * 0.05;
+            const sync = Math.max(0, 1 - Math.hypot(dx, dy) / 200);
+            p3.ctx.strokeStyle = `rgba(0, 212, 170, ${sync * 0.5})`;
+            p3.ctx.lineWidth = 1;
+            p3.ctx.beginPath(); p3.ctx.moveTo(a.x, a.y); p3.ctx.lineTo(a.tx, a.ty); p3.ctx.stroke();
+            p3.ctx.fillStyle = '#00D4AA';
+            p3.ctx.beginPath(); p3.ctx.arc(a.x, a.y, 4, 0, Math.PI * 2); p3.ctx.fill();
+            p3.ctx.fillStyle = 'rgba(100, 255, 218, 0.4)';
+            p3.ctx.beginPath(); p3.ctx.arc(a.tx, a.ty, 3, 0, Math.PI * 2); p3.ctx.fill();
+          });
+          p3.animId = requestAnimationFrame(draw3);
+        }
+        p3.running = true;
+        resizeCanvas(p3); init3();
+        if (!prefersReduced) draw3();
+      }
+
+      // Re-init on resize (debounced)
+      let rt;
+      window.addEventListener('resize', () => {
+        clearTimeout(rt);
+        rt = setTimeout(() => {
+          [p1, p2, p3].forEach(o => { if (o) resizeCanvas(o); });
+        }, 200);
+      });
+    })();
+
+    /* ============================================================
+       5. PUBLICATION FILTERS
+    ============================================================ */
+    (function pubFilters() {
+      const buttons = document.querySelectorAll('.filter-btn');
+      const items = document.querySelectorAll('.pub-item');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          buttons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const f = btn.dataset.filter;
+          items.forEach(item => {
+            if (f === 'all') item.classList.remove('hidden');
+            else item.classList.toggle('hidden', !item.dataset.type.split(' ').includes(f));
+          });
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
