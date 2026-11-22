@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Publications | Dr. Zahoor Ahmed</title>
+  <meta name="description" content="Full peer-reviewed publication list of Dr. Zahoor Ahmed — Automatica, IEEE TVT, IEEE TAES, IEEE IoT-J, ISA Transactions, and more." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary-navy: #0A192F;
+      --primary-navy-2: #0d1b2a;
+      --accent-cyan: #00D4AA;
+      --accent-cyan-light: #64ffda;
+      --alert-orange: #FF6B35;
+      --text-primary: #E6F1FF;
+      --text-secondary: #8892B0;
+      --glass-bg: rgba(10, 25, 47, 0.7);
+      --border-soft: rgba(100, 255, 218, 0.1);
+      --border-strong: rgba(100, 255, 218, 0.3);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--primary-navy);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ---------- Nav (shared style) ---------- */
+    nav {
+      position: fixed; top: 0; width: 100%;
+      padding: 1rem 5%;
+      display: flex; justify-content: space-between; align-items: center;
+      z-index: 1000;
+      background: rgba(10,25,47,0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-soft);
+    }
+    .logo { font-size: 1.5rem; font-weight: 800; color: var(--accent-cyan); text-decoration: none; letter-spacing: -0.5px; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+    .nav-links a { color: var(--text-primary); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.3s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--accent-cyan); }
+    .nav-toggle { display: none; background: none; border: none; cursor: pointer; color: var(--text-primary); font-size: 1.6rem; padding: 0.25rem 0.5rem; }
+
+    /* ---------- Page header ---------- */
+    .page-header {
+      padding: 8rem 5% 3rem;
+      text-align: center;
+      background: linear-gradient(to bottom, var(--primary-navy-2), var(--primary-navy));
+      border-bottom: 1px solid var(--border-soft);
+    }
+    .page-tag {
+      display: inline-block;
+      padding: 0.4rem 0.9rem;
+      background: rgba(0, 212, 170, 0.1);
+      border: 1px solid var(--accent-cyan);
+      border-radius: 50px;
+      color: var(--accent-cyan);
+      font-size: 0.8rem;
+      margin-bottom: 0.85rem;
+    }
+    .page-header h1 { font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 800; margin-bottom: 0.75rem; }
+    .page-header p { color: var(--text-secondary); max-width: 640px; margin: 0 auto; font-size: 1.05rem; }
+
+    .stats-row {
+      display: flex; justify-content: center; gap: 2.5rem; flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+    .stat { text-align: center; }
+    .stat-num { font-size: 2rem; font-weight: 800; color: var(--accent-cyan); }
+    .stat-label { font-size: 0.78rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
+
+    /* ---------- Main ---------- */
+    main { padding: 3rem 5% 5rem; max-width: 1100px; margin: 0 auto; }
+
+    /* ---------- Filters ---------- */
+    .pub-filters {
+      display: flex; gap: 0.6rem; flex-wrap: wrap; justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+    .filter-btn {
+      padding: 0.5rem 1.1rem;
+      background: transparent;
+      border: 1px solid var(--border-soft);
+      border-radius: 50px;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.3s;
+    }
+    .filter-btn:hover { border-color: var(--accent-cyan); color: var(--accent-cyan); }
+    .filter-btn.active {
+      background: var(--accent-cyan); border-color: var(--accent-cyan);
+      color: var(--primary-navy); font-weight: 600;
+    }
+
+    .search-box {
+      max-width: 420px; margin: 0 auto 2.5rem;
+      position: relative;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 0.8rem 1rem 0.8rem 2.6rem;
+      background: var(--glass-bg);
+      border: 1px solid var(--border-soft);
+      border-radius: 50px;
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    .search-box input:focus { border-color: var(--accent-cyan); }
+    .search-box::before {
+      content: '🔍';
+      position: absolute;
+      left: 1rem; top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.85rem;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    /* ---------- Year groups ---------- */
+    .year-group { margin-bottom: 2.5rem; }
+    .year-heading {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border-soft);
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .year-heading .count {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+      background: rgba(0,212,170,0.1);
+      padding: 0.15rem 0.6rem;
+      border-radius: 20px;
+    }
+
+    /* ---------- Publication items ---------- */
+    .pub-list { display: flex; flex-direction: column; gap: 0.9rem; }
+    .pub-item {
+      background: var(--glass-bg);
+      border: 1px solid var(--border-soft);
+      border-left: 3px solid var(--accent-cyan);
+      border-radius: 12px;
+      padding: 1.3rem 1.5rem;
+      transition: all 0.3s;
+    }
+    .pub-item:hover {
+      border-color: var(--border-strong);
+      border-left-color: var(--accent-cyan);
+      transform: translateX(4px);
+      background: rgba(10, 25, 47, 0.85);
+    }
+    .pub-item.hidden { display: none; }
+
+    .pub-authors { font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 0.35rem; }
+    .pub-authors strong { color: var(--text-primary); font-weight: 700; }
+    .pub-title { font-size: 0.97rem; color: var(--text-primary); font-weight: 600; margin-bottom: 0.4rem; line-height: 1.45; }
+    .pub-venue { font-size: 0.87rem; color: var(--accent-cyan); font-style: italic; }
+    .pub-meta { display: flex; gap: 0.6rem; margin-top: 0.65rem; font-size: 0.75rem; flex-wrap: wrap; align-items: center; }
+    .pub-tag {
+      display: inline-block; padding: 0.15rem 0.55rem;
+      background: rgba(0, 212, 170, 0.1); border-radius: 4px;
+      font-size: 0.72rem; color: var(--accent-cyan); font-weight: 500;
+    }
+    .pub-tag.q1 { background: rgba(255, 107, 53, 0.15); color: var(--alert-orange); }
+    .pub-highlight {
+      display: inline-block; padding: 0.15rem 0.55rem;
+      background: rgba(255, 107, 53, 0.15); color: var(--alert-orange);
+      border-radius: 4px; font-size: 0.72rem; font-weight: 600;
+    }
+    .pub-doi {
+      font-size: 0.72rem; color: var(--text-secondary);
+      font-family: 'Courier New', monospace;
+    }
+    .pub-doi a { color: var(--text-secondary); text-decoration: none; }
+    .pub-doi a:hover { color: var(--accent-cyan); text-decoration: underline; }
+    .pub-links { display: flex; gap: 0.75rem; margin-top: 0.6rem; }
+    .pub-links a {
+      font-size: 0.75rem; color: var(--accent-cyan);
+      text-decoration: none; font-weight: 500;
+      display: inline-flex; align-items: center; gap: 0.25rem;
+    }
+    .pub-links a:hover { text-decoration: underline; }
+
+    .no-results {
+      text-align: center; padding: 3rem;
+      color: var(--text-secondary); font-size: 0.95rem;
+      display: none;
+    }
+    .no-results.visible { display: block; }
+
+    /* ---------- Footer ---------- */
+    footer {
+      padding: 2.5rem 5%; text-align: center;
+      border-top: 1px solid var(--border-soft);
+      color: var(--text-secondary); font-size: 0.82rem;
+    }
+    footer a { color: var(--accent-cyan); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        position: fixed; top: 64px; left: 0; width: 100%;
+        flex-direction: column; background: rgba(10,25,47,0.98);
+        backdrop-filter: blur(12px); padding: 1.5rem 5%;
+        gap: 1.25rem; border-bottom: 1px solid var(--border-soft);
+        transform: translateY(-140%); transition: transform 0.35s ease;
+        align-items: flex-start;
+      }
+      .nav-links.open { transform: translateY(0); }
+      .nav-toggle { display: block; }
+      .page-header { padding-top: 6rem; }
+      .stats-row { gap: 1.5rem; }
+      .stat-num { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="logo">ZA.</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#research">Research</a></li>
+      <li><a href="publications.html" class="active">Publications</a></li>
+      <li><a href="index.html#lab">Lab</a></li>
+      <li><a href="index.html#teaching">Teaching</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+  </nav>
+
+  <header class="page-header">
+    <span class="page-tag">Scholarly Output</span>
+    <h1>Full Publication List</h1>
+    <p>Peer-reviewed journal articles and conference papers on resilient consensus, Digital Twins, and cyber-attack detection in autonomous systems.</p>
+    <div class="stats-row">
+      <div class="stat"><div class="stat-num">30+</div><div class="stat-label">Publications</div></div>
+      <div class="stat"><div class="stat-num">12</div><div class="stat-label">First Author</div></div>
+      <div class="stat"><div class="stat-num">6</div><div class="stat-label">Corresponding Author</div></div>
+      <div class="stat"><div class="stat-num">2026</div><div class="stat-label">Latest</div></div>
+    </div>
+  </header>
+
+  <main>
+    <div class="pub-filters" role="tablist" aria-label="Filter publications">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="journal">Journal Articles</button>
+      <button class="filter-btn" data-filter="conference">Conference Papers</button>
+      <button class="filter-btn" data-filter="first">First Author</button>
+      <button class="filter-btn" data-filter="corresponding">Corresponding Author</button>
+      <button class="filter-btn" data-filter="digital-twin">Digital Twin</button>
+    </div>
+
+    <div class="search-box">
+      <input type="search" id="pubSearch" placeholder="Search by title, author, or venue..." aria-label="Search publications" />
+    </div>
+
+    <div id="pubContainer">
+
+      <!-- ================= 2026 ================= -->
+      <section class="year-group" data-year="2026">
+        <h2 class="year-heading">2026 <span class="count">6 papers</span></h2>
+        <div class="pub-list">
+
+          <article class="pub-item" data-type="journal first digital-twin" data-search="ahmed iqbal xie wang chen digital twin attack detection resilient control autonomous surface vehicles ieee transactions vehicular technology">
+            <div class="pub-authors"><strong>Z. Ahmed</strong>, R. Iqbal, T. Xie, L. Wang, H. Chen</div>
+            <div class="pub-title">Digital Twin based Attack Detection and Resilient Control of Autonomous Surface Vehicles</div>
+            <div class="pub-venue">IEEE Transactions on Vehicular Technology, 2026</div>
+            <div class="pub-meta">
+              <span class="pub-tag">Journal</span>
+              <span class="pub-highlight">First Author</span>
+              <span class="pub-doi">doi: 10.1109/TVT.2026.3739966</span>
+            </div>
+          </article>
+
+          <article class="pub-item" data-type="journal first digital-twin" data-search="ahmed lu nasir iqbal graph-aware digital twin resilient consensus uav asv cyber-attacks ieee transactions aerospace electronic systems">
+            <div class="pub-authors"><strong>Z. Ahmed</strong>, Y. Lu, M. Nasir, R. Iqbal</div>
+            <div class="pub-title">Graph-Aware Digital Twin Resilient Consensus of UAV–ASV Systems Under Cyber-Attacks</div>
+            <div class="pub-venue">IEEE Transactions on Aerospace and Electronic Systems, 2026</div>
+            <div class="pub-meta">
+              <span class="pub-tag">Journal</span>
+              <span class="pub-highlight">First Author</span>
+              <span class="pub-doi">doi: 10.1109/TAES.2026.3745720</span>
+            </div>
+          </article>
+
+          <article class="pub-item" data-type="journal first digital-twin" data-search="ahmed lu nasir iqbal digital twin resilient consensus unmanned aerial vehicles attack ieee internet of things journal">
+            <div class="pub-authors"><strong>Z. Ahmed</strong>, Y. Lu, M. Nasir, R. Iqbal</div>
+            <div class="pub-title">Digital Twin-Based Resilient Consensus Control of Unmanned Aerial Vehicles under Attack</div>
+            <div class="pub-venue">IEEE Internet of Things Journal, 2026</div>
+            <div class="pub-meta">
+              <span class="pub-tag">Journal</span>
+              <span class="pub-highlight">First Author</span>
+              <span class="pub-doi">doi: 10.1109/JIOT.2026.3718582</span>
+            </div>
+          </article>
+
+          <article class="pub-item" data-type="journal" data-search="nasir maiti xu garg ahmed chen industrial iot resilient consensus multirobot state space time series edge situation awareness ieee systems journal">
+            <div class="pub-authors">M. Nasir, A. Maiti, S. Xu, S. Garg, Z. Ahmed, H. Chen</div>
+            <div class="pub-title">Industrial IoT-Oriented Resilient Consensus in Multirobot Systems via State Space Time Series Driven Edge Situation Awareness</div>
+            <div class="pub-venue">IEEE Systems Journal, 2026</div>
+            <div class="pub-meta">
+              <span class="pub-tag">Journal</span>
+              <span class="pub-doi">doi: 10.1109/JSYST.2026.3735748</span>
+            </div>
+          </article>
+
+          <article class="pub-item" data-type="journal first" data-search="zafar nasir ahmed group consensus h infinity homogeneous multi-agent cyber-attacks fixed topologies journal vibration control">
+            <div class="pub-authors">M. Zafar, M. Nasir, <strong>Z. Ahmed</strong> (corresponding)</div>
+            <div class="pub-title">Group consensus H∞ control for homogeneous multi-agent systems with cyber-attacks and fixed topologies</div>
+            <div class="pub-venue">Journal of Vibration and Control, 2026</div>
+            <div class="pub-meta">
+              <span class="pub-tag">Journal</span>
+              <span class="pub-highlight">Corresponding Author</span>
+            </div>
+          </article>
+
+          <article class="pub-item" data-type="journal" data-search="nasir gao khan ahmed ali resilient control building scale dc microgrid attacks electric power systems research">
+            <div class="pub-authors">M. Nasir, F. Gao, M. M. Khan, Z. Ahmed, K. Ali</div>
+            <div class="pub-title">Resilient control of a building scale DC microgrid in the presence of attacks</div>
+            <div class="pub-venue">Electric Power Systems Research, 2026, 254, 112586</div>
+            <div class="pub-meta">
+              <span class="pub-tag">Journal</span>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ================= 2025 ================= -->
+      <section class="year-group" data-year="2025">
+        <h2 class="year-heading">2025 <span class="count">2 papers</span></h2>
+        <div class="pub-list">
+
+          <article class="pub-item" data-type="journal" data-search="ali ahmed chen zhang event-triggered generalized state observer finite-time fault-tolerant control underwater vehicles input saturation ieee transactions systems man cybernetics">
+            <div class="pub-authors">N. Ali, Z. Ahmed, H. Chen, W. Zhang</div>
+            <div class="pub-title">Event-Triggered Generalized State Observer-Based Finite-Time Fault-Tolerant Control of Underwater Vehicles with Input Saturation</div>
+            <div class="pub-venue">IEEE Transactions on Systems, Man, and Cybernetics: Systems, 2025</div>
+            <div class="pub-meta">
+              <span class="pub-tag">Journal</span>
+            </div>
+          </article>
+
+          <article class="pub-item" data-type="conference" data-search="zhao wang ahmed zhang distributed sequential balance control modular multilevel converter battery energy storage fasta 2025">
+            <div class="pub-authors">Z. Zhao, L. Wang, <strong>Z. Ahmed</strong>, Y. Zhang</div>
+            <div class="pub-title">Distributed Sequential Balance Control for Modular Multilevel Converter-Based Battery Energy Storage System</div>
+            <div class="pub-venue">4th Conference on Fully Actuated System Theory and Applications (FASTA 2025), IEEE</div>
+            <div class="pub-meta">
+              <span class="pub-tag">Conference</span>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ================= 2024 ================= -->
+      <section class="year-group" data-year="2024">
+        <h2 class="year-heading">2024 <span class="count">2 papers</span></h2>
+        <div class="pub-list">
+
+          <article class="pub-item" data-type="journal first" data-search="ahmed nasir alsekait shah abd-elminaam ahmad control conditions equal power sharing multi-area power systems resilience false data injection attacks energies">
+            <div class="pub-authors"><strong>Z. Ahmed</strong>, M. Nasir, D. M. Alsekait, M. Z. H. Shah, D. S. AbdElminaam, F. Ahmad</div>
+            <div class="pub-title">Control Conditions for Equal Power Sharing in Multi-Area Power Systems for Resilience Against False Data Injection Attacks</div>
+            <div class="pub-venue">Energies, 2024</div>
+            <div class="pub-meta">
+              <span class="pub-tag">Journal</span>
+              <span class="pub-highlight">First Author</span>
+            </div>
+          </article>
+
+          <article class="pub-item" data-type="journal" data-search="cui jenabzadeh ahmed zhang huang resilient distributed control target tracking multiagent systems composite attacks ieee transactions systems man cybernetics">
+            <div class="pub-authors">Y. Cui, A. Jenabzadeh, Z. Ahmed, W. Zhang, T. Huang</div>
+            <div class="pub-title">Resilient Distributed Control and Target Tracking in Multiagent Systems Against Composite Attacks</div>
+            <div class="pub-venue">IEEE Transactions on Systems, Man, and Cybernetics: Systems, 2024</div>
+            <div class="pub-meta">
+              <span class="pub-tag">Journal</span>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ================= 2023 ================= -->
+      <section class="year-group" data-year="2023">
+        <h2 class="year-heading">2023 <span class="count">5 papers</span></h2>
+        <div class="pub-list">
+
+          <article class="pub-item" data-type="journal first" data-search="ahmed ali zhang h2 resilient consensus control multiagent systems deception attack ieee transactions circuits systems express briefs">
+            <div class="pub-authors"><strong>Z. Ahmed</strong>, N. Ali, W. Zhang</div>
+            <div class="pub-title">H₂ Resilient consensus control of multiagent systems under deception attack</div>
+            <div class="pub-venue">IEEE Transactions on Circuits and Systems II: Express Briefs, 2023</div>
+            <div class="pub-meta">
+              <span class="pub-tag">Journal</span>
+              <span class="pub-highlight">First Author</span>
+            </div>
+          </article>
+
+          <article class="pub-item" data-type="journal first" data-search="ahmed frequency domain cascade consensus disturbance rejection control multi-agent systems transactions institute measurement control">
+            <div class="pub-authors"><strong>Z. Ahmed</strong></div>
+            <div class="pub-title">Frequency domain cascade consensus and disturbance rejection control of multi-agent systems</div>
+            <div class="pub-venue">Transactions of the Institute of Measurement and Control, 2023</div>
+            <div class="pub-meta">
+              <span class="pub-tag">Journal</span>
+              <span class="pub-highlight">Sole Author</span>
+            </div>
+          </article>
+
+          <article class="pub-item" data-type="journal first" data-search="nasir ahmed ali saeed h infinity performance tracking group consensus delayed multiagent systems attack journal vibration control">
+            <div class="pub-authors">M. Nasir, <strong>Z. Ahmed</strong> (corresponding), N. Ali, M. A. Saeed</div>
+            <div class="pub-title">H∞ performance tracking and group consensus of delayed multiagent systems under attack</div>
+            <div class="pub-venue">Journal of Vibration and Control, 2023</div>
+            <div class="pub-meta">
+              <span class="pub-tag">Journal</span>
+              <span class="pub-highlight">Corresponding Author</span>
+            </div>
+          </article>
+
+          <article class="pub-item" data-type="journal" data-search="xie zhang zhang ahmed tang marine current turbine multi-fault diagnosis optimization resampled modulus feature 1d-cnn ieee transactions instrumentation measurement">
+            <div class="pub-authors">T. Xie, W. Zhang, Y. Zhang, Z. Ahmed, Y. Tang</div>
+            <div class="pub-title">Marine Current Turbine Multi-Fault Diagnosis based on Optimization Resampled Modulus Feature and 1D-CNN</div>
+            <div class="pub-venue">IEEE Transactions on Instrumentation and Measurement, 2023</div>
+            <div class="pub-meta"><span class="pub-tag">Journal</span></div>
+          </article>
+
+          <article class="pub-item" data-type="journal" data-search="xie zhang li ahmed impact fault detection marine current turbines blade mfgk-means pca variable marine conditions measurement science technology">
+            <div class="pub-authors">T. Xie, W. Zhang, F. Li, Z. Ahmed</div>
+            <div class="pub-title">Impact Fault Detection for Marine Current Turbines Blade via MFGK-means and PCA under Variable Marine Conditions</div>
+            <div class="pub-venue">Measurement Science and Technology, 2023</div>
+            <div class="pub-meta"><span class="pub-tag">Journal</span></div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ================= 2022 ================= -->
+      <section class="year-group" data-year="2022">
+        <h2 class="year-heading">2022 <span class="count">8 papers</span></h2>
+        <div class="pub-list">
+
+          <article class="pub-item" data-type="journal first" data-search="ahmed saeed jenabzadeh xu zhang frequency-domain resilient consensus multi-agent systems imp-based non-imp-based attacks automatica">
+            <div class="pub-authors"><strong>Z. Ahmed</strong>, M. A. Saeed, A. Jenabzadeh, X. Xu, W. Zhang</div>
+            <div class="pub-title">Frequency-domain resilient consensus of multi-agent systems under IMP-based and non-IMP-based attacks</div>
+            <div class="pub-venue">Automatica, 2022</div>
+            <div class="pub-meta">
+              <span class="pub-tag q1">Q1 Top Journal</span>
+              <span class="pub-highlight">First Author</span>
+            </div>
+          </article>
+
+          <article class="pub-item" data-type="journal first" data-search="ahmed aslam du shah ali nasir overview recent advances resilient consensus multiagent systems attacks computational intelligence neuroscience">
+            <div class="pub-authors"><strong>Z. Ahmed</strong>, M. M. Aslam, L. Du, M. Z. H. Shah, S. Ali, M. Nasir</div>
+            <div class="pub-title">An overview of Recent Advances of resilient Consensus for Multiagent systems under Attacks</div>
+            <div class="pub-venue">Computational Intelligence and Neuroscience, 2022</div>
+            <div class="pub-meta">
+              <span class="pub-tag">Review</span>
+              <span class="pub-highlight">First Author</span>
+            </div>
+          </article>
+
+          <article class="pub-item" data-type="journal" data-search="jenabzadeh safarinejadian ahmed zhang distributed estimation control mobile sensor networks jointly connected topology event-triggered isa transactions">
+            <div class="pub-authors">A. Jenabzadeh, B. Safarinejadian, Z. Ahmed, W. Zhang</div>
+            <div class="pub-title">Distributed estimation and control over mobile sensor networks with jointly connected topology: event-triggered approach</div>
+            <div class="pub-venue">ISA Transactions, 2022</div>
+            <div class="pub-meta"><span class="pub-tag">Journal</span></div>
+          </article>
+
+          <article class="pub-item" data-type="journal first" data-search="nasir hayat jamal ahmed frequency-domain consensus control analysis networked multi-agent system controller area network bus-induced delay journal vibration control">
+            <div class="pub-authors">M. Nasir, M. F. Hayat, A. Jamal, <strong>Z. Ahmed</strong> (corresponding)</div>
+            <div class="pub-title">Frequency-domain consensus control analysis of the networked multi-agent system with controller area network bus-induced delay</div>
+            <div class="pub-venue">Journal of Vibration and Control, 2022</div>
+            <div class="pub-meta">
+              <span class="pub-tag">Journal</span>
+              <span class="pub-highlight">Corresponding Author</span>
+            </div>
+          </article>
+
+          <article class="pub-item" data-type="journal" data-search="shah ahmed hu weighted linear local tangent space alignment geometrically inspired weighted pca fault detection ieee transactions industrial informatics">
+            <div class="pub-authors">M. Z. H. Shah, Z. Ahmed, L. Hu</div>
+            <div class="pub-title">Weighted linear local tangent space alignment via geometrically inspired weighted PCA for fault detection</div>
+            <div class="pub-venue">IEEE Transactions on Industrial Informatics, 2022</div>
+            <div class="pub-meta"><span class="pub-tag">Journal</span></div>
+          </article>
+
+          <article class="pub-item" data-type="journal" data-search="ali ahmed zhang state recovery disturbance estimation fast trajectory tracking autonomous surface vehicles finite-time ocean engineering">
+            <div class="pub-authors">N. Ali, Z. Ahmed, W. Zhang</div>
+            <div class="pub-title">State recovery and disturbance estimation-based fast trajectory tracking of autonomous surface vehicles: A finite-time approach</div>
+            <div class="pub-venue">Ocean Engineering, 2022, 244, 110240</div>
+            <div class="pub-meta"><span class="pub-tag">Journal</span></div>
+          </article>
+
+          <article class="pub-item" data-type="journal" data-search="shah ahmed hu feature extraction fault detection improved locality preserving projection svdd transactions institute measurement control">
+            <div class="pub-authors">M. Z. H. Shah, Z. Ahmed, L. Hu</div>
+            <div class="pub-title">Feature extraction and fault detection scheme via improved locality preserving projection and SVDD</div>
+            <div class="pub-venue">Transactions of the Institute of Measurement and Control, 2022</div>
+            <div class="pub-meta"><span class="pub-tag">Journal</span></div>
+          </article>
+
+          <article class="pub-item" data-type="journal" data-search="xu cai ahmed yellapu zhang path planning dynamic collision avoidance colregs deep reinforcement learning neurocomputing">
+            <div class="pub-authors">X. Xu, P. Cai, Z. Ahmed, V. S. Yellapu, W. Zhang</div>
+            <div class="pub-title">Path planning and dynamic collision avoidance algorithm under COLREGs via deep reinforcement learning</div>
+            <div class="pub-venue">Neurocomputing, 2022, 468, 181–197</div>
+            <div class="pub-meta"><span class="pub-tag">Journal</span></div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ================= 2021 ================= -->
+      <section class="year-group" data-year="2021">
+        <h2 class="year-heading">2021 <span class="count">5 papers</span></h2>
+        <div class="pub-list">
+
+          <article class="pub-item" data-type="journal first" data-search="ahmed saeed jenabzadeh zhang frequency domain analysis resilient consensus multi-agent systems integrity attack isa transactions">
+            <div class="pub-authors"><strong>Z. Ahmed</strong>, M. A. Saeed, A. Jenabzadeh, W. Zhang</div>
+            <div class="pub-title">Frequency domain analysis of resilient consensus in multi-agent systems subject to an integrity attack</div>
+            <div class="pub-venue">ISA Transactions, 2021</div>
+            <div class="pub-meta">
+              <span class="pub-tag">Journal</span>
+              <span class="pub-highlight">First Author</span>
+            </div>
+          </article>
+
+          <article class="pub-item" data-type="journal" data-search="saeed ahmed zhang optimal approach wind resource assessment kolmogorov-smirnov statistic large-scale wind farm pakistan renewable energy">
+            <div class="pub-authors">M. A. Saeed, Z. Ahmed, W. Zhang</div>
+            <div class="pub-title">Optimal approach for wind resource assessment using Kolmogorov–Smirnov statistic: A case study for large-scale wind farm in Pakistan</div>
+            <div class="pub-venue">Renewable Energy, 2021</div>
+            <div class="pub-meta"><span class="pub-tag">Journal</span></div>
+          </article>
+
+          <article class="pub-item" data-type="journal" data-search="saeed ahmed hussain zhang wind resource assessment economic analysis wind energy development pakistan sustainable energy technologies assessments">
+            <div class="pub-authors">M. A. Saeed, Z. Ahmed, S. Hussain, W. Zhang</div>
+            <div class="pub-title">Wind resource assessment and economic analysis for wind energy development in Pakistan</div>
+            <div class="pub-venue">Sustainable Energy Technologies and Assessments, 2021</div>
+            <div class="pub-meta"><span class="pub-tag">Journal</span></div>
+          </article>
+
+          <article class="pub-item" data-type="journal" data-search="aslam du ahmed irshad azeem deep learning power control consensus performance spectrum sharing cognitive radio network wireless communications mobile computing">
+            <div class="pub-authors">M. M. Aslam, L. Du, Z. Ahmed, M. N. Irshad, H. Azeem</div>
+            <div class="pub-title">A Deep Learning-Based Power Control and Consensus Performance of Spectrum Sharing in the CR Network</div>
+            <div class="pub-venue">Wireless Communications and Mobile Computing, 2021</div>
+            <div class="pub-meta"><span class="pub-tag">Journal</span></div>
+          </article>
+
+          <article class="pub-item" data-type="journal first" data-search="aslam du zhang chen ahmed qureshi sixth-generation 6g cognitive radio network crn application requirements security issues key challenges wireless communications mobile computing">
+            <div class="pub-authors">M. M. Aslam, L. Du, X. Zhang, Y. Chen, <strong>Z. Ahmed</strong> (corresponding), B. Qureshi</div>
+            <div class="pub-title">Sixth-Generation (6G) Cognitive Radio Network (CRN) Application, Requirements, Security Issues, and Key Challenges</div>
+            <div class="pub-venue">Wireless Communications and Mobile Computing, 2021</div>
+            <div class="pub-meta">
+              <span class="pub-tag">Journal</span>
+              <span class="pub-highlight">Corresponding Author</span>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ================= 2020 ================= -->
+      <section class="year-group" data-year="2020">
+        <h2 class="year-heading">2020 <span class="count">2 papers</span></h2>
+        <div class="pub-list">
+
+          <article class="pub-item" data-type="journal first" data-search="ahmed saeed khan zhang consensus control multi-agent systems input communication delay frequency-domain perspective isa transactions">
+            <div class="pub-authors"><strong>Z. Ahmed</strong>, M. A. Saeed, M. A. Khan, W. Zhang</div>
+            <div class="pub-title">Consensus control of multi-agent systems with input and communication delay: A frequency-domain perspective</div>
+            <div class="pub-venue">ISA Transactions, 2020</div>
+            <div class="pub-meta">
+              <span class="pub-tag">Journal</span>
+              <span class="pub-highlight">First Author</span>
+            </div>
+          </article>
+
+          <article class="pub-item" data-type="journal" data-search="saeed ahmed hussain zhang optimal approach wind power assessment chebyshev metric weibull distribution parameters sustainable energy technologies assessments">
+            <div class="pub-authors">M. A. Saeed, Z. Ahmed, S. Hussain, W. Zhang</div>
+            <div class="pub-title">An optimal approach of wind power assessment using Chebyshev metric for determining the Weibull distribution parameters</div>
+            <div class="pub-venue">Sustainable Energy Technologies and Assessments, 2020</div>
+            <div class="pub-meta"><span class="pub-tag">Journal</span></div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ================= 2019 ================= -->
+      <section class="year-group" data-year="2019">
+        <h2 class="year-heading">2019 <span class="count">2 papers</span></h2>
+        <div class="pub-list">
+
+          <article class="pub-item" data-type="journal" data-search="saeed ahmed zhang wind energy potential economic analysis comparison different methods optimal distribution parameters renewable energy">
+            <div class="pub-authors">M. A. Saeed, Z. Ahmed, W. Zhang</div>
+            <div class="pub-title">Wind energy potential and economic analysis with a comparison of different methods for determining the optimal distribution parameters</div>
+            <div class="pub-venue">Renewable Energy, 2020 (online 2019)</div>
+            <div class="pub-meta"><span class="pub-tag">Journal</span></div>
+          </article>
+
+          <article class="pub-item" data-type="journal" data-search="rasool khan ahmed saeed analysis h infinity robust control three-phase voltage source inverter inventions">
+            <div class="pub-authors">M. A. U. Rasool, M. M. Khan, Z. Ahmed, M. A. Saeed</div>
+            <div class="pub-title">Analysis of an H∞ Robust Control for a Three-Phase Voltage Source Inverter</div>
+            <div class="pub-venue">Inventions, 2019, 4, 18</div>
+            <div class="pub-meta"><span class="pub-tag">Journal</span></div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ================= Conferences (all years) ================= -->
+      <section class="year-group" data-year="conferences">
+        <h2 class="year-heading">Conference Papers <span class="count">4 papers</span></h2>
+        <div class="pub-list">
+
+          <article class="pub-item" data-type="conference" data-search="nasir gao khan ahmed ali voltage power regulation dc microgrids situation awareness distributed resilient control chinese control conference ccc 2026 changsha">
+            <div class="pub-authors">M. Nasir, F. Gao, M. N. Khan, <strong>Z. Ahmed</strong> (presenter), K. Ali</div>
+            <div class="pub-title">Voltage and Power Regulation of DC Microgrids through Situation Awareness-based Distributed Resilient Control</div>
+            <div class="pub-venue">45th Chinese Control Conference (CCC 2026), Changsha, China</div>
+            <div class="pub-meta"><span class="pub-tag">Conference</span></div>
+          </article>
+
+          <article class="pub-item" data-type="conference" data-search="zhao wang ahmed zhang distributed sequential balance control modular multilevel converter battery energy storage system fasta 2025 ieee">
+            <div class="pub-authors">Z. Zhao, L. Wang, <strong>Z. Ahmed</strong>, Y. Zhang</div>
+            <div class="pub-title">Distributed Sequential Balance Control for Modular Multilevel Converter-Based Battery Energy Storage System</div>
+            <div class="pub-venue">4th Conference on Fully Actuated System Theory and Applications (FASTA 2025), IEEE</div>
+            <div class="pub-meta"><span class="pub-tag">Conference</span></div>
+          </article>
+
+          <article class="pub-item" data-type="conference" data-search="aslam tufail ahmed kalinaki nasir apong spectrum sharing consensus performance vehicular networks deep multi-user reinforcement learning dasc picom ieee">
+            <div class="pub-authors">M. M. Aslam, A. Tufail, Z. Ahmed, K. Kalinaki, M. Nasir, R. A. A. H. M. Apong</div>
+            <div class="pub-title">Spectrum Sharing and Consensus Performance of Vehicular Networks based on Deep Multi-User Reinforcement Learning</div>
+            <div class="pub-venue">IEEE DASC/PiCom/CBDCom/CyberSciTech, 2023, pp. 0348–0354</div>
+            <div class="pub-meta"><span class="pub-tag">Conference</span></div>
+          </article>
+
+          <article class="pub-item" data-type="conference" data-search="aslam zhang qureshi ahmed beyond6g consensus traffic management crn applications architecture key challenges iceiec beijing 2021">
+            <div class="pub-authors">M. M. Aslam, J. Zhang, B. Qureshi, Z. Ahmed</div>
+            <div class="pub-title">Beyond6G-Consensus Traffic Management in CRN, Applications, Architecture, and Key Challenges</div>
+            <div class="pub-venue">26th IEEE ICEIEC, Beijing, China, 2021</div>
+            <div class="pub-meta"><span class="pub-tag">Conference</span></div>
+          </article>
+
+        </div>
+      </section>
+
+    </div>
+
+    <div class="no-results" id="noResults">
+      No publications match your search.
+    </div>
+
+    <p style="text-align:center; margin-top:2rem; color:var(--text-secondary); font-size:0.9rem;">
+      Full list also available on
+      <a href="https://scholar.google.com/citations?user=U7uM20cAAAAJ&hl=en" target="_blank" rel="noopener" style="color:var(--accent-cyan);">Google Scholar</a>
+      and
+      <a href="https://www.researchgate.net/profile/Zahoor-Ahmed-11" target="_blank" rel="noopener" style="color:var(--accent-cyan);">ResearchGate</a>.
+    </p>
+  </main>
+
+  <footer>
+    <p>© <span id="year"></span> Dr. Zahoor Ahmed · Shanghai University of Electric Power</p>
+    <p style="margin-top:0.5rem;">
+      <a href="index.html">Home</a> ·
+      <a href="Zahoor_Ahmed_CV_2026.pdf" download>Download CV</a> ·
+      <a href="https://scholar.google.com/citations?user=U7uM20cAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a>
+    </p>
+  </footer>
+
+  <script>
+    // Nav
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    navToggle.addEventListener('click', () => {
+      const open = navLinks.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded', open);
+      navToggle.textContent = open ? '✕' : '☰';
+    });
+    navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      navToggle.textContent = '☰';
+    }));
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Filter + search
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const pubItems = document.querySelectorAll('.pub-item');
+    const yearGroups = document.querySelectorAll('.year-group');
+    const searchInput = document.getElementById('pubSearch');
+    const noResults = document.getElementById('noResults');
+
+    let activeFilter = 'all';
+    let searchTerm = '';
+
+    function applyFilters() {
+      let visibleCount = 0;
+      pubItems.forEach(item => {
+        const typeMatch = activeFilter === 'all' || item.dataset.type.split(' ').includes(activeFilter);
+        const searchMatch = !searchTerm || (item.dataset.search || '').includes(searchTerm);
+        const visible = typeMatch && searchMatch;
+        item.classList.toggle('hidden', !visible);
+        if (visible) visibleCount++;
+      });
+
+      // Hide empty year groups
+      yearGroups.forEach(group => {
+        const anyVisible = group.querySelectorAll('.pub-item:not(.hidden)').length > 0;
+        group.style.display = anyVisible ? '' : 'none';
+      });
+
+      noResults.classList.toggle('visible', visibleCount === 0);
+    }
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeFilter = btn.dataset.filter;
+        applyFilters();
+      });
+    });
+
+    searchInput.addEventListener('input', e => {
+      searchTerm = e.target.value.trim().toLowerCase();
+      applyFilters();
+    });
+  </script>
+</body>
+</html>

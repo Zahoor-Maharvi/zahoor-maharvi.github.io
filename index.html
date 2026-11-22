@@ -10,32 +10,92 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --primary-navy: #0A192F;
-      --primary-navy-2: #0d1b2a;
+      --primary-navy: #061A1F;
+      --primary-navy-2: #0B2830;
       --accent-cyan: #00D4AA;
       --accent-cyan-light: #64ffda;
       --alert-orange: #FF6B35;
-      --text-primary: #E6F1FF;
-      --text-secondary: #8892B0;
-      --glass-bg: rgba(10, 25, 47, 0.7);
+      --text-primary: #E8F4F2;
+      --text-secondary: #7FA8A5;
+      --glass-bg: rgba(6, 26, 31, 0.65);
       --grid-line: rgba(100, 255, 218, 0.1);
-      --border-soft: rgba(100, 255, 218, 0.1);
-      --border-strong: rgba(100, 255, 218, 0.3);
+      --border-soft: rgba(0, 212, 170, 0.12);
+      --border-strong: rgba(0, 212, 170, 0.35);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     html { scroll-behavior: smooth; }
 
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background-color: var(--primary-navy);
       color: var(--text-primary);
+      background: #061A1F;
       overflow-x: hidden;
       line-height: 1.6;
+      position: relative;
+      min-height: 100vh;
     }
 
-    /* ---------- Navigation ---------- */
+    /* ============================================================
+       AURORA MESH BACKGROUND
+       Fixed gradient + animated blobs behind all content
+    ============================================================ */
+    .aurora-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+      background: linear-gradient(180deg, #061A1F 0%, #0B2830 50%, #061A1F 100%);
+    }
+    .aurora-bg::before,
+    .aurora-bg::after {
+      content: '';
+      position: absolute;
+      width: 70vw;
+      height: 70vw;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.35;
+      animation: auroraFloat 20s ease-in-out infinite;
+      will-change: transform;
+    }
+    .aurora-bg::before {
+      top: -20%;
+      left: -15%;
+      background: radial-gradient(circle, #00D4AA 0%, transparent 70%);
+    }
+    .aurora-bg::after {
+      bottom: -30%;
+      right: -15%;
+      background: radial-gradient(circle, #FF6B35 0%, transparent 70%);
+      animation-delay: -10s;
+      animation-duration: 25s;
+    }
+
+    /* Optional subtle grid overlay */
+    .aurora-grid {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(100, 255, 218, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(100, 255, 218, 0.04) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: radial-gradient(ellipse at 50% 20%, black 20%, transparent 80%);
+      -webkit-mask-image: radial-gradient(ellipse at 50% 20%, black 20%, transparent 80%);
+    }
+
+    @keyframes auroraFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(5%, 8%) scale(1.1); }
+      66% { transform: translate(-5%, -5%) scale(0.95); }
+    }
+
+    /* ============================================================
+       NAVIGATION
+    ============================================================ */
     nav {
       position: fixed;
       top: 0; width: 100%;
@@ -44,7 +104,7 @@
       justify-content: space-between;
       align-items: center;
       z-index: 1000;
-      background: linear-gradient(to bottom, rgba(10,25,47,0.95), rgba(10,25,47,0.6));
+      background: linear-gradient(to bottom, rgba(6,26,31,0.95), rgba(6,26,31,0.6));
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid transparent;
@@ -52,9 +112,8 @@
     }
     nav.scrolled {
       border-bottom-color: var(--border-soft);
-      background: rgba(10,25,47,0.95);
+      background: rgba(6,26,31,0.95);
     }
-
     .logo {
       font-size: 1.5rem;
       font-weight: 800;
@@ -62,7 +121,6 @@
       text-decoration: none;
       letter-spacing: -0.5px;
     }
-
     .nav-links {
       display: flex;
       gap: 2rem;
@@ -88,7 +146,6 @@
     }
     .nav-links a:hover { color: var(--accent-cyan); }
     .nav-links a:hover::after { width: 100%; }
-
     .nav-toggle {
       display: none;
       background: none; border: none; cursor: pointer;
@@ -96,7 +153,9 @@
       padding: 0.25rem 0.5rem;
     }
 
-    /* ---------- Buttons ---------- */
+    /* ============================================================
+       BUTTONS
+    ============================================================ */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -113,7 +172,7 @@
     }
     .btn-primary {
       background: var(--accent-cyan);
-      color: var(--primary-navy);
+      color: #061A1F;
       box-shadow: 0 10px 30px -10px rgba(0, 212, 170, 0.5);
     }
     .btn-primary:hover {
@@ -123,15 +182,26 @@
     .btn-secondary {
       border-color: var(--text-secondary);
       color: var(--text-primary);
-      background: transparent;
+      background: rgba(6, 26, 31, 0.5);
+      backdrop-filter: blur(8px);
     }
     .btn-secondary:hover {
       border-color: var(--accent-cyan);
       color: var(--accent-cyan);
-      background: rgba(0, 212, 170, 0.05);
+      background: rgba(0, 212, 170, 0.08);
     }
+    .btn-ghost {
+      background: transparent;
+      border-color: transparent;
+      color: var(--text-secondary);
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+    .btn-ghost:hover { color: var(--accent-cyan); }
 
-    /* ---------- Hero ---------- */
+    /* ============================================================
+       HERO
+    ============================================================ */
     .hero {
       position: relative;
       min-height: 100vh;
@@ -139,6 +209,7 @@
       align-items: center;
       padding: 7rem 5% 4rem;
       overflow: hidden;
+      background: transparent;
     }
     #digital-twin-canvas {
       position: absolute;
@@ -153,18 +224,18 @@
       max-width: 760px;
       animation: fadeInUp 1s ease-out both;
     }
-
     .status-badge {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
       padding: 0.5rem 1rem;
-      background: rgba(255, 107, 53, 0.1);
+      background: rgba(255, 107, 53, 0.12);
       border: 1px solid var(--alert-orange);
       border-radius: 50px;
       font-size: 0.85rem;
       color: var(--alert-orange);
-      margin-bottom: 1.75rem;
+      margin-bottom: 1.5rem;
+      backdrop-filter: blur(8px);
     }
     .pulse-dot {
       width: 8px; height: 8px;
@@ -172,6 +243,27 @@
       border-radius: 50%;
       animation: blink 1.5s infinite;
     }
+
+    /* Hero profile photo */
+    .hero-profile {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .profile-photo {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent-cyan);
+      box-shadow: 0 0 24px rgba(0, 212, 170, 0.45);
+      flex-shrink: 0;
+      background: var(--primary-navy-2);
+    }
+    .profile-meta { display: flex; flex-direction: column; line-height: 1.35; }
+    .profile-name { font-size: 1rem; font-weight: 700; color: var(--text-primary); }
+    .profile-role { font-size: 0.82rem; color: var(--text-secondary); }
 
     h1 {
       font-size: clamp(2.2rem, 5.5vw, 4rem);
@@ -190,23 +282,24 @@
       max-width: 620px;
     }
     .highlight { color: var(--accent-cyan); font-weight: 600; }
+    .cta-group { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
 
-    .cta-group { display: flex; gap: 1rem; flex-wrap: wrap; }
-
-    /* ---------- Twin Status Card ---------- */
+    /* ============================================================
+       TWIN STATUS CARD
+    ============================================================ */
     .twin-status-card {
       position: absolute;
       right: 5%; bottom: 8%;
       background: var(--glass-bg);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(100, 255, 218, 0.2);
+      border: 1px solid rgba(100, 255, 218, 0.25);
       border-radius: 16px;
       padding: 1.75rem;
       z-index: 3;
       width: 340px;
       animation: slideInRight 1s ease-out 0.4s both;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
     }
     .twin-header {
       display: flex;
@@ -251,7 +344,6 @@
     }
     .metric-value.safe { color: var(--accent-cyan); }
     .metric-value.warning { color: var(--alert-orange); }
-
     .sync-bar {
       grid-column: span 2;
       height: 6px;
@@ -279,7 +371,6 @@
     }
     .attack-alert.active { display: block; animation: slideDown 0.3s ease-out; }
 
-    /* ---------- Scroll Indicator ---------- */
     .scroll-indicator {
       position: absolute;
       bottom: 1.75rem; left: 50%;
@@ -306,8 +397,14 @@
       animation: scrollWheel 2s infinite;
     }
 
-    /* ---------- Section base ---------- */
-    section { padding: 6rem 5%; position: relative; }
+    /* ============================================================
+       SECTIONS
+    ============================================================ */
+    section {
+      padding: 6rem 5%;
+      position: relative;
+      background: transparent;
+    }
     .container { max-width: 1200px; margin: 0 auto; }
 
     .section-header { text-align: center; margin-bottom: 4rem; }
@@ -321,16 +418,24 @@
       font-size: 0.8rem;
       margin-bottom: 0.85rem;
       font-weight: 500;
+      backdrop-filter: blur(8px);
     }
     .section-title {
       font-size: clamp(1.9rem, 4vw, 2.6rem);
       font-weight: 800;
       margin-bottom: 0.75rem;
     }
-    .section-subtitle { color: var(--text-secondary); font-size: 1.05rem; max-width: 640px; margin: 0 auto; }
+    .section-subtitle {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      max-width: 640px;
+      margin: 0 auto;
+    }
 
-    /* ---------- Pipeline / Timeline ---------- */
-    .pipeline-section { background: linear-gradient(to bottom, var(--primary-navy), var(--primary-navy-2)); }
+    /* ============================================================
+       TIMELINE / PIPELINE
+    ============================================================ */
+    .pipeline-section { background: transparent; }
     .timeline-container { position: relative; padding: 2rem 0; }
     .timeline-line {
       position: absolute;
@@ -358,7 +463,10 @@
       transition: opacity 0.6s ease, transform 0.6s ease;
     }
     .timeline-item.visible { opacity: 1; transform: translateY(0); }
-    .timeline-node { display: flex; align-items: center; justify-content: center; position: relative; }
+    .timeline-node {
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
     .node-dot {
       width: 20px; height: 20px;
       background: var(--primary-navy);
@@ -367,7 +475,10 @@
       z-index: 2;
       position: relative;
     }
-    .node-dot.current { background: var(--accent-cyan); box-shadow: 0 0 20px var(--accent-cyan); }
+    .node-dot.current {
+      background: var(--accent-cyan);
+      box-shadow: 0 0 20px var(--accent-cyan);
+    }
     .node-pulse {
       position: absolute;
       width: 40px; height: 40px;
@@ -379,8 +490,8 @@
 
     .timeline-content {
       background: var(--glass-bg);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border: 1px solid var(--border-soft);
       border-radius: 16px;
       padding: 2rem;
@@ -389,11 +500,10 @@
     .timeline-content:hover {
       transform: translateY(-5px);
       border-color: var(--border-strong);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
     }
     .timeline-content.left { text-align: right; }
     .timeline-content.right { text-align: left; }
-
     .phase-badge {
       display: inline-block;
       padding: 0.25rem 0.75rem;
@@ -407,13 +517,34 @@
       letter-spacing: 1px;
     }
     .phase-badge.current { background: var(--alert-orange); color: white; }
-
-    .timeline-content h3 { font-size: 1.5rem; margin-bottom: 0.5rem; font-weight: 700; }
-    .institution { display: block; color: var(--accent-cyan); font-size: 0.9rem; margin-bottom: 0.2rem; font-weight: 500; }
-    .duration { display: block; color: var(--text-secondary); font-size: 0.8rem; margin-bottom: 1.25rem; }
-    .timeline-content p { color: var(--text-secondary); line-height: 1.7; margin-bottom: 1.25rem; font-size: 0.95rem; }
-
-    .tech-stack { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.25rem; }
+    .timeline-content h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+    .institution {
+      display: block;
+      color: var(--accent-cyan);
+      font-size: 0.9rem;
+      margin-bottom: 0.2rem;
+      font-weight: 500;
+    }
+    .duration {
+      display: block;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      margin-bottom: 1.25rem;
+    }
+    .timeline-content p {
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+      font-size: 0.95rem;
+    }
+    .tech-stack {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+      margin-bottom: 1.25rem;
+    }
     .timeline-content.left .tech-stack { justify-content: flex-end; }
     .tech-tag {
       padding: 0.3rem 0.7rem;
@@ -425,7 +556,7 @@
     }
     .key-paper {
       padding: 0.85rem;
-      background: rgba(0, 212, 170, 0.05);
+      background: rgba(0, 212, 170, 0.06);
       border-left: 3px solid var(--accent-cyan);
       border-radius: 0 8px 8px 0;
       font-size: 0.85rem;
@@ -437,10 +568,12 @@
       text-align: right;
     }
 
-    .timeline-visual { display: flex; align-items: center; justify-content: center; }
+    .timeline-visual {
+      display: flex; align-items: center; justify-content: center;
+    }
     .viz-container {
       width: 100%; height: 240px;
-      background: rgba(10, 25, 47, 0.5);
+      background: rgba(6, 26, 31, 0.5);
       border: 1px solid var(--border-soft);
       border-radius: 12px;
       position: relative;
@@ -448,7 +581,7 @@
     }
     .viz-container.active {
       border-color: var(--accent-cyan);
-      box-shadow: 0 0 30px rgba(0, 212, 170, 0.2);
+      box-shadow: 0 0 30px rgba(0, 212, 170, 0.25);
     }
     .phase-canvas { width: 100%; height: 100%; display: block; }
     .viz-label {
@@ -471,9 +604,15 @@
       animation: blink 2s infinite;
     }
 
-    /* ---------- Domains grid ---------- */
+    /* ============================================================
+       RESEARCH DOMAINS
+    ============================================================ */
     .research-areas { margin-top: 5rem; }
-    .subheading { text-align: center; font-size: 1.75rem; margin-bottom: 2.5rem; }
+    .subheading {
+      text-align: center;
+      font-size: 1.75rem;
+      margin-bottom: 2.5rem;
+    }
     .domains-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -481,6 +620,7 @@
     }
     .domain-card {
       background: var(--glass-bg);
+      backdrop-filter: blur(12px);
       border: 1px solid var(--border-soft);
       border-radius: 16px;
       padding: 2rem;
@@ -501,12 +641,17 @@
     .domain-card:hover {
       transform: translateY(-8px);
       border-color: var(--border-strong);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
     }
     .domain-card:hover::before { transform: scaleX(1); }
     .domain-icon { font-size: 2.5rem; margin-bottom: 1rem; }
     .domain-card h4 { font-size: 1.15rem; margin-bottom: 0.75rem; }
-    .domain-card p { color: var(--text-secondary); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.9rem; }
+    .domain-card p {
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 1.25rem;
+      font-size: 0.9rem;
+    }
     .domain-status {
       display: inline-block;
       padding: 0.4rem 0.9rem;
@@ -517,11 +662,16 @@
       font-weight: 600;
     }
 
-    /* ---------- Publications ---------- */
-    .pub-filters { display: flex; gap: 0.6rem; flex-wrap: wrap; justify-content: center; margin-bottom: 2.5rem; }
+    /* ============================================================
+       PUBLICATIONS PREVIEW
+    ============================================================ */
+    .pub-filters {
+      display: flex; gap: 0.6rem; flex-wrap: wrap; justify-content: center;
+      margin-bottom: 2.5rem;
+    }
     .filter-btn {
       padding: 0.5rem 1.1rem;
-      background: transparent;
+      background: rgba(6, 26, 31, 0.5);
       border: 1px solid var(--border-soft);
       border-radius: 50px;
       color: var(--text-secondary);
@@ -529,6 +679,7 @@
       cursor: pointer;
       font-family: inherit;
       transition: all 0.3s;
+      backdrop-filter: blur(8px);
     }
     .filter-btn:hover { border-color: var(--accent-cyan); color: var(--accent-cyan); }
     .filter-btn.active {
@@ -537,23 +688,42 @@
       color: var(--primary-navy);
       font-weight: 600;
     }
-
     .pub-list { display: flex; flex-direction: column; gap: 1rem; }
     .pub-item {
       background: var(--glass-bg);
+      backdrop-filter: blur(12px);
       border: 1px solid var(--border-soft);
       border-radius: 12px;
       padding: 1.4rem 1.6rem;
       transition: all 0.3s;
       border-left: 3px solid var(--accent-cyan);
     }
-    .pub-item:hover { border-color: var(--border-strong); transform: translateX(4px); }
+    .pub-item:hover {
+      border-color: var(--border-strong);
+      transform: translateX(4px);
+    }
     .pub-item.hidden { display: none; }
-    .pub-authors { font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 0.35rem; }
+    .pub-authors {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.35rem;
+    }
     .pub-authors strong { color: var(--text-primary); font-weight: 600; }
-    .pub-title { font-size: 0.95rem; color: var(--text-primary); font-weight: 600; margin-bottom: 0.35rem; line-height: 1.45; }
+    .pub-title {
+      font-size: 0.95rem;
+      color: var(--text-primary);
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+      line-height: 1.45;
+    }
     .pub-venue { font-size: 0.85rem; color: var(--accent-cyan); font-style: italic; }
-    .pub-meta { display: flex; gap: 1rem; margin-top: 0.5rem; font-size: 0.78rem; color: var(--text-secondary); flex-wrap: wrap; }
+    .pub-meta {
+      display: flex; gap: 1rem;
+      margin-top: 0.5rem;
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      flex-wrap: wrap;
+    }
     .pub-tag {
       display: inline-block;
       padding: 0.15rem 0.5rem;
@@ -572,7 +742,9 @@
       font-weight: 600;
     }
 
-    /* ---------- Projects ---------- */
+    /* ============================================================
+       PROJECTS
+    ============================================================ */
     .projects-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -580,12 +752,16 @@
     }
     .project-card {
       background: var(--glass-bg);
+      backdrop-filter: blur(12px);
       border: 1px solid var(--border-soft);
       border-radius: 16px;
       padding: 1.75rem;
       transition: all 0.3s;
     }
-    .project-card:hover { border-color: var(--border-strong); transform: translateY(-4px); }
+    .project-card:hover {
+      border-color: var(--border-strong);
+      transform: translateY(-4px);
+    }
     .project-status {
       display: inline-block;
       padding: 0.25rem 0.7rem;
@@ -597,7 +773,6 @@
       letter-spacing: 0.5px;
     }
     .project-status.active { background: rgba(0, 212, 170, 0.15); color: var(--accent-cyan); }
-    .project-status.completed { background: rgba(136, 146, 176, 0.15); color: var(--text-secondary); }
     .project-card h4 { font-size: 1.05rem; margin-bottom: 0.5rem; line-height: 1.4; }
     .project-funder { font-size: 0.85rem; color: var(--accent-cyan); margin-bottom: 0.75rem; }
     .project-meta { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1rem; }
@@ -613,7 +788,9 @@
       font-family: 'Courier New', monospace;
     }
 
-    /* ---------- Teaching / Awards ---------- */
+    /* ============================================================
+       INFO CARDS
+    ============================================================ */
     .two-col {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -621,6 +798,7 @@
     }
     .info-card {
       background: var(--glass-bg);
+      backdrop-filter: blur(12px);
       border: 1px solid var(--border-soft);
       border-radius: 16px;
       padding: 1.75rem;
@@ -647,9 +825,16 @@
       left: 0;
       color: var(--accent-cyan);
     }
-    .info-list li strong { color: var(--text-primary); font-weight: 600; display: block; margin-bottom: 0.15rem; }
+    .info-list li strong {
+      color: var(--text-primary);
+      font-weight: 600;
+      display: block;
+      margin-bottom: 0.15rem;
+    }
 
-    /* ---------- Contact ---------- */
+    /* ============================================================
+       CONTACT
+    ============================================================ */
     .contact-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -658,15 +843,25 @@
     }
     .contact-item {
       background: var(--glass-bg);
+      backdrop-filter: blur(12px);
       border: 1px solid var(--border-soft);
       border-radius: 12px;
       padding: 1.25rem;
       text-align: center;
       transition: all 0.3s;
     }
-    .contact-item:hover { border-color: var(--border-strong); transform: translateY(-3px); }
+    .contact-item:hover {
+      border-color: var(--border-strong);
+      transform: translateY(-3px);
+    }
     .contact-item .icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
-    .contact-item .label { font-size: 0.72rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.35rem; }
+    .contact-item .label {
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.35rem;
+    }
     .contact-item a {
       color: var(--accent-cyan);
       text-decoration: none;
@@ -678,15 +873,26 @@
 
     .recruiting-banner {
       background: linear-gradient(135deg, rgba(255, 107, 53, 0.15), rgba(0, 212, 170, 0.1));
+      backdrop-filter: blur(12px);
       border: 1px solid var(--alert-orange);
       border-radius: 16px;
       padding: 2rem;
       text-align: center;
     }
-    .recruiting-banner h3 { font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--alert-orange); }
-    .recruiting-banner p { color: var(--text-secondary); margin-bottom: 1.25rem; font-size: 0.92rem; }
+    .recruiting-banner h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.75rem;
+      color: var(--alert-orange);
+    }
+    .recruiting-banner p {
+      color: var(--text-secondary);
+      margin-bottom: 1.25rem;
+      font-size: 0.92rem;
+    }
 
-    /* ---------- Footer ---------- */
+    /* ============================================================
+       FOOTER
+    ============================================================ */
     footer {
       padding: 2.5rem 5%;
       text-align: center;
@@ -697,7 +903,9 @@
     footer a { color: var(--accent-cyan); text-decoration: none; }
     footer a:hover { text-decoration: underline; }
 
-    /* ---------- Animations ---------- */
+    /* ============================================================
+       ANIMATIONS
+    ============================================================ */
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(30px); }
       to { opacity: 1; transform: translateY(0); }
@@ -723,14 +931,16 @@
       100% { transform: scale(1.5); opacity: 0; }
     }
 
-    /* ---------- Responsive ---------- */
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
     @media (max-width: 968px) {
       .nav-links {
         position: fixed;
         top: 64px; left: 0;
         width: 100%;
         flex-direction: column;
-        background: rgba(10,25,47,0.98);
+        background: rgba(6,26,31,0.98);
         backdrop-filter: blur(12px);
         padding: 1.5rem 5%;
         gap: 1.25rem;
@@ -744,7 +954,12 @@
 
       .twin-status-card { display: none; }
 
-      .hero { padding-top: 6rem; align-items: flex-start; min-height: auto; padding-bottom: 4rem; }
+      .hero {
+        padding-top: 6rem;
+        align-items: flex-start;
+        min-height: auto;
+        padding-bottom: 4rem;
+      }
 
       .timeline-container { padding-left: 1.5rem; }
       .timeline-line { left: 20px; }
@@ -767,11 +982,14 @@
 
     @media (max-width: 480px) {
       section { padding: 4rem 5%; }
-      .cta-group { flex-direction: column; }
+      .cta-group { flex-direction: column; align-items: stretch; }
       .btn { width: 100%; justify-content: center; }
+      .hero-profile { flex-direction: column; align-items: flex-start; gap: 0.6rem; }
     }
 
-    /* ---------- Reduced motion ---------- */
+    /* ============================================================
+       REDUCED MOTION
+    ============================================================ */
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
         animation-duration: 0.01ms !important;
@@ -779,17 +997,27 @@
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
       }
+      .aurora-bg::before,
+      .aurora-bg::after { animation: none; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ===================== NAV ===================== -->
+  <!-- ============================================================
+       AURORA MESH BACKGROUND (fixed layer behind everything)
+  ============================================================ -->
+  <div class="aurora-bg" aria-hidden="true"></div>
+  <div class="aurora-grid" aria-hidden="true"></div>
+
+  <!-- ============================================================
+       NAVIGATION
+  ============================================================ -->
   <nav id="navbar">
     <a href="#" class="logo">ZA.</a>
     <ul class="nav-links" id="navLinks">
       <li><a href="#research">Research</a></li>
-      <li><a href="#publications">Publications</a></li>
+      <li><a href="publications.html">Publications</a></li>
       <li><a href="#lab">Lab</a></li>
       <li><a href="#teaching">Teaching</a></li>
       <li><a href="#contact">Contact</a></li>
@@ -797,7 +1025,9 @@
     <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
   </nav>
 
-  <!-- ===================== HERO ===================== -->
+  <!-- ============================================================
+       HERO
+  ============================================================ -->
   <section class="hero" id="home">
     <canvas id="digital-twin-canvas" aria-hidden="true"></canvas>
 
@@ -807,10 +1037,17 @@
         Recruiting PhD / MSc Students — Digital Twin Security
       </div>
 
+      <div class="hero-profile">
+        <img src="profile.jpg" alt="Dr. Zahoor Ahmed" class="profile-photo" width="120" height="120" />
+        <div class="profile-meta">
+          <span class="profile-name">Dr. Zahoor Ahmed</span>
+          <span class="profile-role">Assistant Professor · Shanghai University of Electric Power</span>
+        </div>
+      </div>
+
       <h1>Securing Autonomous Systems through <span class="highlight">Digital Twin</span> Intelligence</h1>
 
       <p class="subtitle">
-        Assistant Professor at Shanghai University of Electric Power ·
         Research on <span class="highlight">Resilient Consensus Control</span>,
         <span class="highlight">Cyber-Attack Detection</span>, and
         <span class="highlight">Multi-Agent Systems</span> (UAVs, ASVs, Smart Grids)
@@ -818,7 +1055,8 @@
 
       <div class="cta-group">
         <a href="#research" class="btn btn-primary">Explore Research Lab</a>
-        <a href="mailto:zahoorgcu10@shiep.edu.cn?subject=Collaboration%20Inquiry%20-%20Digital%20Twin" class="btn btn-secondary">Collaborate</a>
+        <a href="Zahoor_Ahmed_CV_2026.pdf" class="btn btn-secondary" download>⬇ Download CV</a>
+        <a href="mailto:zahoorgcu10@shiep.edu.cn?subject=Collaboration%20Inquiry%20-%20Digital%20Twin" class="btn btn-ghost">Collaborate</a>
       </div>
     </div>
 
@@ -857,7 +1095,9 @@
     </div>
   </section>
 
-  <!-- ===================== RESEARCH / PIPELINE ===================== -->
+  <!-- ============================================================
+       RESEARCH / PIPELINE
+  ============================================================ -->
   <section id="research" class="pipeline-section">
     <div class="container">
       <div class="section-header">
@@ -970,122 +1210,109 @@
     </div>
   </section>
 
-  <!-- ===================== PUBLICATIONS ===================== -->
+  <!-- ============================================================
+       PUBLICATIONS PREVIEW
+  ============================================================ -->
   <section id="publications">
     <div class="container">
       <div class="section-header">
         <span class="section-tag">Scholarly Output</span>
         <h2 class="section-title">Selected Publications</h2>
-        <p class="section-subtitle">Peer-reviewed journals and conference papers. See Google Scholar for the full list.</p>
+        <p class="section-subtitle">Peer-reviewed journals and conference papers. See the full list for all 30+ publications.</p>
+      </div>
+
+      <div style="text-align:center; margin-bottom:1.5rem;">
+        <a href="publications.html" class="btn btn-secondary" style="font-size:0.9rem; padding:0.7rem 1.5rem;">
+          View Full Publication List →
+        </a>
       </div>
 
       <div class="pub-filters">
         <button class="filter-btn active" data-filter="all">All</button>
         <button class="filter-btn" data-filter="journal">Journals</button>
         <button class="filter-btn" data-filter="conference">Conferences</button>
-        <button class="filter-btn" data-filter="first">First / Corresponding Author</button>
+        <button class="filter-btn" data-filter="first">First / Corresponding</button>
       </div>
 
       <div class="pub-list">
-        <!-- 1 -->
         <article class="pub-item" data-type="journal first">
           <div class="pub-authors"><strong>Z. Ahmed</strong>, M. A. Saeed, A. Jenabzadeh, X. Xu, W. Zhang</div>
           <div class="pub-title">Frequency-domain resilient consensus of multi-agent systems under IMP-based and non-IMP-based attacks</div>
           <div class="pub-venue">Automatica, 2022</div>
           <div class="pub-meta"><span class="pub-tag">Journal</span><span class="pub-highlight">First Author</span></div>
         </article>
-        <!-- 2 -->
         <article class="pub-item" data-type="journal first">
           <div class="pub-authors"><strong>Z. Ahmed</strong>, R. Iqbal, T. Xie, L. Wang, H. Chen</div>
           <div class="pub-title">Digital Twin based Attack Detection and Resilient Control of Autonomous Surface Vehicles</div>
           <div class="pub-venue">IEEE Transactions on Vehicular Technology, 2026</div>
           <div class="pub-meta"><span class="pub-tag">Journal</span><span class="pub-highlight">First Author</span><span>doi:10.1109/TVT.2026.3739966</span></div>
         </article>
-        <!-- 3 -->
         <article class="pub-item" data-type="journal first">
           <div class="pub-authors"><strong>Z. Ahmed</strong>, Y. Lu, M. Nasir, R. Iqbal</div>
           <div class="pub-title">Graph-Aware Digital Twin Resilient Consensus of UAV–ASV Systems Under Cyber-Attacks</div>
           <div class="pub-venue">IEEE Transactions on Aerospace and Electronic Systems, 2026</div>
           <div class="pub-meta"><span class="pub-tag">Journal</span><span class="pub-highlight">First Author</span><span>doi:10.1109/TAES.2026.3745720</span></div>
         </article>
-        <!-- 4 -->
         <article class="pub-item" data-type="journal first">
           <div class="pub-authors"><strong>Z. Ahmed</strong>, Y. Lu, M. Nasir, R. Iqbal</div>
           <div class="pub-title">Digital Twin-Based Resilient Consensus Control of Unmanned Aerial Vehicles under Attack</div>
           <div class="pub-venue">IEEE Internet of Things Journal, 2026</div>
           <div class="pub-meta"><span class="pub-tag">Journal</span><span class="pub-highlight">First Author</span><span>doi:10.1109/JIOT.2026.3718582</span></div>
         </article>
-        <!-- 5 -->
         <article class="pub-item" data-type="journal first">
           <div class="pub-authors"><strong>Z. Ahmed</strong>, N. Ali, W. Zhang</div>
           <div class="pub-title">H₂ Resilient consensus control of multiagent systems under deception attack</div>
           <div class="pub-venue">IEEE Transactions on Circuits and Systems II: Express Briefs, 2023</div>
           <div class="pub-meta"><span class="pub-tag">Journal</span><span class="pub-highlight">First Author</span></div>
         </article>
-        <!-- 6 -->
         <article class="pub-item" data-type="journal first">
           <div class="pub-authors"><strong>Z. Ahmed</strong>, M. A. Saeed, A. Jenabzadeh, W. Zhang</div>
           <div class="pub-title">Frequency domain analysis of resilient consensus in multi-agent systems subject to an integrity attack</div>
           <div class="pub-venue">ISA Transactions, 2021</div>
           <div class="pub-meta"><span class="pub-tag">Journal</span><span class="pub-highlight">First Author</span></div>
         </article>
-        <!-- 7 -->
         <article class="pub-item" data-type="journal first">
           <div class="pub-authors"><strong>Z. Ahmed</strong>, M. A. Saeed, M. A. Khan, W. Zhang</div>
           <div class="pub-title">Consensus control of multi-agent systems with input and communication delay: A frequency-domain perspective</div>
           <div class="pub-venue">ISA Transactions, 2020</div>
           <div class="pub-meta"><span class="pub-tag">Journal</span><span class="pub-highlight">First Author</span></div>
         </article>
-        <!-- 8 -->
         <article class="pub-item" data-type="journal first">
           <div class="pub-authors"><strong>Z. Ahmed</strong></div>
           <div class="pub-title">Frequency domain cascade consensus and disturbance rejection control of multi-agent systems</div>
           <div class="pub-venue">Transactions of the Institute of Measurement and Control, 2023</div>
           <div class="pub-meta"><span class="pub-tag">Journal</span><span class="pub-highlight">Sole Author</span></div>
         </article>
-        <!-- 9 -->
         <article class="pub-item" data-type="journal first">
           <div class="pub-authors">M. Zafar, M. Nasir, <strong>Z. Ahmed</strong> (corresponding)</div>
           <div class="pub-title">Group consensus H∞ control for homogeneous multi-agent systems with cyber-attacks and fixed topologies</div>
           <div class="pub-venue">Journal of Vibration and Control, 2026</div>
           <div class="pub-meta"><span class="pub-tag">Journal</span><span class="pub-highlight">Corresponding</span></div>
         </article>
-        <!-- 10 -->
-        <article class="pub-item" data-type="journal first">
-          <div class="pub-authors">M. Nasir, Z. Ahmed (corresponding), N. Ali, M. A. Saeed</div>
-          <div class="pub-title">H∞ performance tracking and group consensus of delayed multiagent systems under attack</div>
-          <div class="pub-venue">Journal of Vibration and Control, 2023</div>
-          <div class="pub-meta"><span class="pub-tag">Journal</span><span class="pub-highlight">Corresponding</span></div>
-        </article>
-        <!-- 11 -->
         <article class="pub-item" data-type="journal">
           <div class="pub-authors">M. Nasir, A. Maiti, S. Xu, S. Garg, Z. Ahmed, H. Chen</div>
           <div class="pub-title">Industrial IoT-Oriented Resilient Consensus in Multirobot Systems via State Space Time Series Driven Edge Situation Awareness</div>
           <div class="pub-venue">IEEE Systems Journal, 2026</div>
           <div class="pub-meta"><span class="pub-tag">Journal</span><span>doi:10.1109/JSYST.2026.3735748</span></div>
         </article>
-        <!-- 12 -->
-        <article class="pub-item" data-type="journal">
-          <div class="pub-authors">Z. Ahmed, M. Nasir, D. M. Alsekait, M. Z. H. Shah, D. S. AbdElminaam, F. Ahmad</div>
+        <article class="pub-item" data-type="journal first">
+          <div class="pub-authors"><strong>Z. Ahmed</strong>, M. Nasir, D. M. Alsekait, M. Z. H. Shah, D. S. AbdElminaam, F. Ahmad</div>
           <div class="pub-title">Control Conditions for Equal Power Sharing in Multi-Area Power Systems for Resilience Against False Data Injection Attacks</div>
           <div class="pub-venue">Energies, 2024</div>
-          <div class="pub-meta"><span class="pub-tag">Journal</span></div>
+          <div class="pub-meta"><span class="pub-tag">Journal</span><span class="pub-highlight">First Author</span></div>
         </article>
-        <!-- 13 -->
         <article class="pub-item" data-type="journal">
           <div class="pub-authors">N. Ali, Z. Ahmed, H. Chen, W. Zhang</div>
           <div class="pub-title">Event-Triggered Generalized State Observer-Based Finite-Time Fault-Tolerant Control of Underwater Vehicles with Input Saturation</div>
           <div class="pub-venue">IEEE Transactions on Systems, Man, and Cybernetics: Systems, 2025</div>
           <div class="pub-meta"><span class="pub-tag">Journal</span></div>
         </article>
-        <!-- 14 -->
         <article class="pub-item" data-type="conference">
           <div class="pub-authors">M. Nasir, F. Gao, M. N. Khan, <strong>Z. Ahmed</strong> (presenter), K. Ali</div>
           <div class="pub-title">Voltage and Power Regulation of DC Microgrids through Situation Awareness-based Distributed Resilient Control</div>
           <div class="pub-venue">45th Chinese Control Conference (CCC 2026), Changsha, China</div>
           <div class="pub-meta"><span class="pub-tag">Conference</span></div>
         </article>
-        <!-- 15 -->
         <article class="pub-item" data-type="conference">
           <div class="pub-authors">Z. Zhao, L. Wang, <strong>Z. Ahmed</strong>, Y. Zhang</div>
           <div class="pub-title">Distributed Sequential Balance Control for Modular Multilevel Converter-Based Battery Energy Storage System</div>
@@ -1103,8 +1330,10 @@
     </div>
   </section>
 
-  <!-- ===================== LAB / PROJECTS ===================== -->
-  <section id="lab" style="background: linear-gradient(to bottom, var(--primary-navy), var(--primary-navy-2));">
+  <!-- ============================================================
+       LAB / PROJECTS
+  ============================================================ -->
+  <section id="lab">
     <div class="container">
       <div class="section-header">
         <span class="section-tag">Funded Research</span>
@@ -1162,7 +1391,9 @@
     </div>
   </section>
 
-  <!-- ===================== TEACHING ===================== -->
+  <!-- ============================================================
+       TEACHING
+  ============================================================ -->
   <section id="teaching">
     <div class="container">
       <div class="section-header">
@@ -1218,8 +1449,10 @@
     </div>
   </section>
 
-  <!-- ===================== CONTACT ===================== -->
-  <section id="contact" style="background: linear-gradient(to bottom, var(--primary-navy-2), var(--primary-navy));">
+  <!-- ============================================================
+       CONTACT
+  ============================================================ -->
+  <section id="contact">
     <div class="container">
       <div class="section-header">
         <span class="section-tag">Get in Touch</span>
@@ -1249,6 +1482,11 @@
           <a href="https://scholar.google.com/citations?user=U7uM20cAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a>
           <a href="https://www.researchgate.net/profile/Zahoor-Ahmed-11" target="_blank" rel="noopener" style="display:block; margin-top:0.25rem;">ResearchGate</a>
         </div>
+        <div class="contact-item">
+          <div class="icon">📄</div>
+          <div class="label">CV</div>
+          <a href="Zahoor_Ahmed_CV_2026.pdf" download>Download (PDF)</a>
+        </div>
       </div>
 
       <div class="recruiting-banner">
@@ -1259,21 +1497,24 @@
     </div>
   </section>
 
-  <!-- ===================== FOOTER ===================== -->
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
   <footer>
     <p>© <span id="year"></span> Dr. Zahoor Ahmed · Shanghai University of Electric Power</p>
     <p style="margin-top:0.5rem;">
       <a href="https://scholar.google.com/citations?user=U7uM20cAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a> ·
       <a href="https://www.researchgate.net/profile/Zahoor-Ahmed-11" target="_blank" rel="noopener">ResearchGate</a> ·
-      <a href="https://fai.shiep.edu.cn/1b/2f/c6542a269103/page.htm" target="_blank" rel="noopener">SUEP Profile</a>
+      <a href="https://fai.shiep.edu.cn/1b/2f/c6542a269103/page.htm" target="_blank" rel="noopener">SUEP Profile</a> ·
+      <a href="Zahoor_Ahmed_CV_2026.pdf" download>Download CV</a>
     </p>
   </footer>
 
-  <!-- ===================== SCRIPTS ===================== -->
+  <!-- ============================================================
+       SCRIPTS
+  ============================================================ -->
   <script>
-    /* ============================================================
-       1. NAVIGATION (scroll style + mobile toggle)
-    ============================================================ */
+    /* ---------- 1. Navigation ---------- */
     const navbar = document.getElementById('navbar');
     const navToggle = document.getElementById('navToggle');
     const navLinks = document.getElementById('navLinks');
@@ -1298,9 +1539,7 @@
 
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    /* ============================================================
-       2. HERO — Digital Twin particle system
-    ============================================================ */
+    /* ---------- 2. Hero Digital Twin particle system ---------- */
     (function heroCanvas() {
       const canvas = document.getElementById('digital-twin-canvas');
       if (!canvas) return;
@@ -1353,7 +1592,6 @@
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.size * 1.2, 0, Math.PI * 2);
             ctx.fill();
-
             ctx.strokeStyle = 'rgba(255, 107, 53, 0.5)';
             ctx.lineWidth = 2;
             ctx.beginPath();
@@ -1474,14 +1712,12 @@
         }
       }
 
-      // Resize handling (debounced)
       let resizeTimer;
       window.addEventListener('resize', () => {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(resize, 150);
       });
 
-      // Pause when tab hidden (saves battery)
       document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
           if (rafId) cancelAnimationFrame(rafId);
@@ -1491,21 +1727,18 @@
         }
       });
 
-      // Mouse
       window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
       window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
 
-      // Init
       if (canvas.offsetWidth > 0) resize();
-      else { requestAnimationFrame(() => { resize(); }); }
+      else { requestAnimationFrame(() => resize()); }
       if (!prefersReduced) animate();
-      else { // static render for reduced motion
+      else {
         drawGrid();
         for (const p of particles) p.draw();
         connect();
       }
 
-      // Metrics fluctuation
       setInterval(() => {
         const latency = document.getElementById('latency');
         const bar = document.getElementById('sync-bar');
@@ -1518,9 +1751,7 @@
       }, 2000);
     })();
 
-    /* ============================================================
-       3. PIPELINE — Intersection Observer + timeline progress
-    ============================================================ */
+    /* ---------- 3. Pipeline timeline ---------- */
     (function pipeline() {
       const items = document.querySelectorAll('.timeline-item');
       const progress = document.getElementById('timeline-progress');
@@ -1546,9 +1777,7 @@
       updateProgress();
     })();
 
-    /* ============================================================
-       4. PHASE CANVAS ANIMATIONS (resize-aware, pause when off-screen)
-    ============================================================ */
+    /* ---------- 4. Phase canvas animations ---------- */
     (function phaseCanvases() {
       const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -1565,7 +1794,7 @@
         obj.c.height = Math.max(1, Math.floor(rect.height));
       }
 
-      /* ---------- Phase 1: sine waves ---------- */
+      /* Phase 1: sine waves */
       const p1 = setupCanvas('phase1-canvas');
       if (p1) {
         let t = 0;
@@ -1593,10 +1822,9 @@
         p1.running = true;
         resizeCanvas(p1);
         if (!prefersReduced) draw1();
-        else { resizeCanvas(p1); /* draw one static frame */ }
       }
 
-      /* ---------- Phase 2: scanning grid ---------- */
+      /* Phase 2: scanning grid */
       const p2 = setupCanvas('phase2-canvas');
       if (p2) {
         let scanX = 0;
@@ -1643,7 +1871,7 @@
         if (!prefersReduced) draw2();
       }
 
-      /* ---------- Phase 3: live sync ---------- */
+      /* Phase 3: live sync */
       const p3 = setupCanvas('phase3-canvas');
       if (p3) {
         let agents = [];
@@ -1684,7 +1912,6 @@
         if (!prefersReduced) draw3();
       }
 
-      // Re-init on resize (debounced)
       let rt;
       window.addEventListener('resize', () => {
         clearTimeout(rt);
@@ -1694,9 +1921,7 @@
       });
     })();
 
-    /* ============================================================
-       5. PUBLICATION FILTERS
-    ============================================================ */
+    /* ---------- 5. Publication filters ---------- */
     (function pubFilters() {
       const buttons = document.querySelectorAll('.filter-btn');
       const items = document.querySelectorAll('.pub-item');
